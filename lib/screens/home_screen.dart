@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:skyhive/screens/ticket_view.dart';
 
+import '../utils/app_info_list.dart';
 import '../utils/app_styles.dart';
+import 'hotel_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -43,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                         image: const DecorationImage(
                           fit: BoxFit.fitHeight,
                           image: AssetImage(
-                            "assets/images/delivery.png"
+                            "assets/images/apple.jpeg"
                           )
                         )
                       ),
@@ -56,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     color: const Color(0xFFF4F6FD)
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12) ,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12) ,
                   child: Row(
                     children: [
                       const Icon(FluentSystemIcons.ic_fluent_search_regular, color: Color(0xFFBFC205)),
@@ -85,7 +87,38 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const Gap(15),
-          TicketView(),
+            SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding:  const EdgeInsets.only(left: 20),
+            child: Row(
+              children: ticketList.map((singleTicket) => TicketView(ticket: singleTicket,)).toList(),
+            ),
+          ),
+          const Gap(15),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Hotels", style: Styles.headLineStyle2,),
+                  InkWell(
+                      onTap: (){
+                        print("You are tapped");
+                      },
+                      child: Text("View all", style: Styles.textStyle.copyWith(color: Styles.primaryColor),
+                      )
+                  )
+                ]
+            ),
+          ),
+          const Gap(15),
+           SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: 20),
+              child:  Row(
+                children: hotelList.map((singleHotel) => HotelScreen(hotel: singleHotel)).toList()
+              ),
+          ),
         ],
       ),
     );
