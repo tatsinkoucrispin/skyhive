@@ -47,18 +47,5 @@ List<Map<String, dynamic>> ticketList = [
     'departure_time':"09:00 AM",
     "number":45
   },
-  {
-    'from':{
-      'code':"CMR",
-      'name':"Cameroon"
-    },
-    'to':{
-      'code':"FR",
-      'name':"France"
-    },
-    'flying_time':"10H 00M",
-    'date':"1 MAY",
-    'departure_time':"05:00 AM",
-    "number":60
-  },
+
 ];
