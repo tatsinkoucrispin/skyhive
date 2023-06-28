@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                         image: const DecorationImage(
                           fit: BoxFit.fitHeight,
                           image: AssetImage(
-                            "assets/images/apple.jpeg"
+                            "assets/images/logo.jpeg"
                           )
                         )
                       ),

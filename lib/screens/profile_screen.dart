@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppLayout.getHeight(10)),
                   image: const DecorationImage(
                     image: AssetImage(
-                      "assets/images/apple.jpeg"
+                      "assets/images/logo.jpeg"
                     )
                   )
                 ),
@@ -135,7 +135,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("You\'c got a new award",
+                        Text("You\'ve got a new award",
                         style: Styles.headLineStyle2.copyWith(
                           fontWeight: FontWeight.bold, color: Colors.white),
                         ),

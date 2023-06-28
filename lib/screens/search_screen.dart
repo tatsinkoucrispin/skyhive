@@ -7,6 +7,7 @@ import '../widgets/double_text_widget.dart';
 import '../widgets/icon_text_widget.dart';
 import '../widgets/ticket_taps.dart';
 
+
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
@@ -21,7 +22,7 @@ class SearchScreen extends StatelessWidget {
           Gap(AppLayout.getHeight(40)),
           Text("What are\nyou looking for?", style: Styles.headLineStyle1.copyWith(fontSize: AppLayout.getWidth(35)),),
           Gap(AppLayout.getHeight(20)),
-           const AppTicketTabs(firstTab: "Airline Tickets", secondTab: "Hotels",),
+          const AppTicketTabs(firstTab: "Airline Tickets",secondTab: "Hotels",),
            Gap(AppLayout.getHeight(25)),
           const AppIconText(icon: Icons.flight_takeoff_rounded, text: "Departure"),
           Gap(AppLayout.getHeight(20)),
@@ -72,7 +73,7 @@ class SearchScreen extends StatelessWidget {
                         image: const DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            "assets/images/ekwang.jpg"
+                            "assets/images/areoport.jpg"
                           )
                         )
                       ),

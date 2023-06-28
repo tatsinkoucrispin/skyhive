@@ -84,7 +84,7 @@ class TicketScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Image.asset("assets/images/visa_96px.png", scale: 11,),
+                              Image.asset("assets/images/visa.png", scale: 40,),
                               Text("*** 2462",style: Styles.headLineStyle3)
                             ],
                           ),
@@ -150,7 +150,7 @@ class TicketScreen extends StatelessWidget {
                 border: Border.all(color: Styles.textColor, width: 2)
               ),
               child: CircleAvatar(
-                maxRadius: 40,
+                maxRadius: 4,
                 backgroundColor: Styles.textColor,
               ),
             ),
@@ -165,7 +165,7 @@ class TicketScreen extends StatelessWidget {
                   border: Border.all(color: Styles.textColor, width: 2)
               ),
               child: CircleAvatar(
-                maxRadius: 40,
+                maxRadius: 4,
                 backgroundColor: Styles.textColor,
               ),
             ),

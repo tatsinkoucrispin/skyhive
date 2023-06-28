@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/app_layout.dart';
+import 'package:skyhive/utils/app_layout.dart';
 
 class AppTicketTabs extends StatelessWidget {
   final String firstTab;
@@ -25,25 +23,25 @@ class AppTicketTabs extends StatelessWidget {
                 airtime ticket
                  */
             Container(
-              width: size.width*44,
+              width: size.width*.44,
               padding: EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.horizontal(left: Radius.circular(AppLayout.getHeight(50),)),
                   color: Colors.white
               ),
-              child: Center(child: Text(firstTab),),
+              child:  Center(child: Text(firstTab),),
             ),
             /*
                 hotels
                  */
             Container(
-              width: size.width*44,
+              width: size.width*.44,
               padding: EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.horizontal(right: Radius.circular(AppLayout.getHeight(50),)),
                   color: Colors.transparent
               ),
-              child: Center(child: Text(secondTab),),
+              child:  Center(child: Text(secondTab),),
             ),
           ],
         ),
