@@ -6,6 +6,7 @@ import '../utils/app_styles.dart';
 import '../widgets/double_text_widget.dart';
 import '../widgets/icon_text_widget.dart';
 import '../widgets/ticket_taps.dart';
+import 'form_screen.dart';
 
 
 class SearchScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = AppLayout.getSize(context);
+    final TextEditingController departureController = TextEditingController();
     return  Scaffold(
       backgroundColor: Styles.bgColor,
       body: ListView(
@@ -22,26 +24,141 @@ class SearchScreen extends StatelessWidget {
           Gap(AppLayout.getHeight(40)),
           Text("What are\nyou looking for?", style: Styles.headLineStyle1.copyWith(fontSize: AppLayout.getWidth(35)),),
           Gap(AppLayout.getHeight(20)),
-          const AppTicketTabs(firstTab: "Airline Tickets",secondTab: "Hotels",),
-           Gap(AppLayout.getHeight(25)),
-          const AppIconText(icon: Icons.flight_takeoff_rounded, text: "Departure"),
-          Gap(AppLayout.getHeight(20)),
-          const AppIconText(icon: Icons.flight_land_rounded, text: "Arrival"),
-          Gap(AppLayout.getHeight(25)),
-          Container(
-            padding: EdgeInsets.symmetric(
-                vertical: AppLayout.getWidth(18),
-                horizontal: AppLayout.getWidth(15)),
-            decoration: BoxDecoration(
-                color: Color(0xD91130CE),
-                borderRadius: BorderRadius.circular(AppLayout.getWidth(10))
+          FittedBox(
+            child: Container(
+              padding: const EdgeInsets.all(3.5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    AppLayout.getHeight(50),
+                  ),
+                  color: const Color(0xFFF4F6FD)),
+              child: Row(
+                children: [
+                  /*
+                airtime ticket
+                 */
+                  Container(
+                    width: size.width * .44,
+                    padding:
+                        EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(
+                          AppLayout.getHeight(50),
+                        )),
+                        color: Colors.white),
+                    child: const Center(
+                      child: Text("Airline Tickets"),
+                    ),
+                  ),
+                  /*
+                hotels
+                 */
+                  Container(
+                    width: size.width * .44,
+                    padding:
+                        EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.horizontal(
+                            right: Radius.circular(
+                          AppLayout.getHeight(50),
+                        )),
+                        color: Colors.transparent),
+                    child: const Center(
+                      child: Text("Hotels"),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Center(
+          ),
+          Gap(AppLayout.getHeight(25)),
+          Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: AppLayout.getWidth(3), horizontal: AppLayout.getWidth(3)),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppLayout.getWidth(10))
+                ),
+                child: Row(
+                  children:[
+                    Icon(Icons.flight_takeoff_rounded, color: const Color(0xFFBFC2DF),),
+                    Gap(AppLayout.getWidth(10)),
+                    Expanded(
+                      child: TextFormField(
+                        controller: departureController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Departure",
+                          hintStyle: Styles.textStyle.copyWith(color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Gap(AppLayout.getHeight(20)),
+          Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: AppLayout.getWidth(3), horizontal: AppLayout.getWidth(3)),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppLayout.getWidth(10))
+                ),
+                child: Row(
+                  children:[
+                    Icon(Icons.flight_land_rounded, color: const Color(0xFFBFC2DF),),
+                    Gap(AppLayout.getWidth(10)),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Arrival",
+                          hintStyle: Styles.textStyle.copyWith(color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Gap(AppLayout.getHeight(25)),
+          GestureDetector(
+            onTap: () {
+              if (departureController.text.isNotEmpty) {
+                Navigator.pushNamed(
+                  context,
+                  '/form',
+                  arguments: {'departure': departureController.text},
+                );
+                FocusScope.of(context).requestFocus(new FocusNode());
+              } else {
+                // Afficher un message d'erreur ou faire une action en cas de champ vide
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: AppLayout.getWidth(18),
+                horizontal: AppLayout.getWidth(15),
+              ),
+              decoration: BoxDecoration(
+                color: Color(0xFF526799),
+                borderRadius: BorderRadius.circular(AppLayout.getWidth(10)),
+              ),
+              child: Center(
                 child: Text(
                   "find tickets",
-                  style: Styles.textStyle.copyWith(color: Colors.white,),
+                  style: Styles.textStyle.copyWith(color: Colors.white),
                 ),
-            )
+              ),
+            ),
           ),
           Gap(AppLayout.getHeight(40)),
           const AppDoubleTextWidget(bigText: "Upcoming Flights", smallText: "View all"),

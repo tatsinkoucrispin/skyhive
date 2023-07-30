@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "434606783466",
+    "project_id": "ticket-auth-8dc06",
+    "storage_bucket": "ticket-auth-8dc06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434606783466:android:43bc8a6622607b1c0e5093",
+        "android_client_info": {
+          "package_name": "com.example.skyhive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434606783466-cmim95onac2teitfr4bqlj3jjfgk7jpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8grqFk_bDv0s2BRFFCWtqRHZosPK1Y7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434606783466-cmim95onac2teitfr4bqlj3jjfgk7jpb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

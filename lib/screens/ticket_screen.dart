@@ -5,7 +5,6 @@ import 'package:skyhive/screens/ticket_view.dart';
 import 'package:skyhive/utils/app_info_list.dart';
 import 'package:skyhive/widgets/column_layout.dart';
 import 'package:skyhive/widgets/ticket_taps.dart';
-
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
 import '../widgets/layout_builder_widget.dart';
@@ -137,6 +136,50 @@ class TicketScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: AppLayout.getHeight(15)),
               child: TicketView(ticket: ticketList[0], ),
+            ),
+            Gap(AppLayout.getHeight(20)),
+            GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: AppLayout.getWidth(18),
+                  horizontal: AppLayout.getWidth(8),
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF37B67),
+                  borderRadius: BorderRadius.circular(AppLayout.getWidth(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Editer",
+                    style: Styles.textStyle.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            Gap(AppLayout.getHeight(15)),
+            GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: AppLayout.getWidth(18),
+                  horizontal: AppLayout.getHeight(8),
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF37B67),
+                  borderRadius: BorderRadius.circular(AppLayout.getWidth(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    "Imprimer",
+                    style: Styles.textStyle.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
