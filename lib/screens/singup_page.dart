@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:skyhive/screens/ticket_screen.dart';
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
 import 'package:twitter_login/twitter_login.dart';
@@ -146,8 +147,8 @@ class SignUpPage extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  AuthController.instance.register(emailController.text.trim(),
-                      passwordController.text.trim());
+                  AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
+                  Get.toNamed('/ticket');
                 },
                 child: Container(
                   width: w * 0.5,
@@ -188,8 +189,9 @@ class SignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () async {
-                        await signInWithGoogle();
+                      onTap: (){
+                        signInWithGoogle();
+                        Get.toNamed('/ticket');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -220,8 +222,9 @@ class SignUpPage extends StatelessWidget {
                     //   ),
                     // ),
                     GestureDetector(
-                      onTap: () async {
-                        await signInWithTwitter();
+                      onTap: () {
+                        signInWithTwitter();
+                        Get.toNamed('/ticket');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),

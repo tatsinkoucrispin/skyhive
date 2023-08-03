@@ -20,17 +20,17 @@ class AuthController extends GetxController{
     super.onReady();
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+   // ever(_user, _initialScreen);
   }
 
-  _initialScreen(User? user){
-    if(user==null){
-      print("login page");
-      Get.offAll(()=>LoginPage());
-    } else {
-      Get.offAll(()=>ProfileScreen(email:user.email!));
-    }
-  }
+  // _initialScreen(User? user){
+  //   if(user==null){
+  //     print("login page");
+  //     Get.offAll(()=>LoginPage());
+  //   } else {
+  //     Get.offAll(()=>ProfileScreen(email:user.email!));
+  //   }
+  // }
   void register(String email, password)async{
     try{
      await auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -53,7 +53,7 @@ class AuthController extends GetxController{
       );
     }
   }
-  void login(String email, password)async{
+  void login(String email, password) async{
     try{
       await auth.signInWithEmailAndPassword(email: email, password: password);
     }catch(e){

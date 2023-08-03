@@ -15,9 +15,7 @@ class FormScreen extends StatefulWidget {
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
-
 class _FormScreenState extends State<FormScreen> {
-
   DateTime selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   String valueChoose = "Premiere";

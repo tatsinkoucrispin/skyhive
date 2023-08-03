@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:skyhive/utils/app_layout.dart';
 
 import '../utils/app_styles.dart';
@@ -17,6 +18,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final departureController = TextEditingController();
     final arrivalController = TextEditingController();
+
     final size = AppLayout.getSize(context);
     return  Scaffold(
       backgroundColor: Styles.bgColor,
@@ -136,16 +138,10 @@ class SearchScreen extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (departureController.text.isNotEmpty && arrivalController.text.isNotEmpty ) {
-                CollectionReference collRef = FirebaseFirestore.instance.collection('search');
-                collRef.add({
-                  'departure' : departureController.text,
-                  'arrival' : arrivalController.text,
-                });
-                Navigator.pushNamed(
-                  context,
-                  '/form'
-                );
-                FocusScope.of(context).requestFocus(new FocusNode());
+                String departure = departureController.text;
+                String arrival = arrivalController.text;
+                saveData(departure, arrival);
+                Get.to(()=>FormScreen());
               } else {
                 // Afficher un message d'erreur ou faire une action en cas de champ vide
               }
@@ -161,7 +157,7 @@ class SearchScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "create tickets",
+                  "tickets",
                   style: Styles.textStyle.copyWith(color: Colors.white),
                 ),
               ),
@@ -284,5 +280,19 @@ class SearchScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+  Future<void> saveData(String departure, String arrival) async {
+    try {
+      CollectionReference collection =
+      FirebaseFirestore.instance.collection('/search');
+
+      await collection.add({
+        'departure': departure,
+        'arrival': arrival,
+      });
+      print('Data saved successfully!');
+    } catch (e) {
+      print('Error saving data: $e');
+    }
   }
 }

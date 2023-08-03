@@ -159,9 +159,11 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 70,),
             GestureDetector(
-              onTap: ()async{
+              onTap: (){
                 AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
-                await makePayment();
+                Get.toNamed('/ticket');
+                // Navigator.popUntil(context, ModalRoute.withName('/ticket'));
+                //await makePayment();
               },
               child: Container(
                 width: w*0.5,
