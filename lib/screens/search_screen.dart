@@ -284,7 +284,7 @@ class SearchScreen extends StatelessWidget {
   Future<void> saveData(String departure, String arrival) async {
     try {
       CollectionReference collection =
-      FirebaseFirestore.instance.collection('/search');
+      FirebaseFirestore.instance.collection('search');
 
       await collection.add({
         'departure': departure,
