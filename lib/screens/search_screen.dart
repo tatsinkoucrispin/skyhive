@@ -7,6 +7,7 @@ import '../widgets/double_text_widget.dart';
 import '../widgets/icon_text_widget.dart';
 import '../widgets/ticket_taps.dart';
 import 'form_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class SearchScreen extends StatelessWidget {
@@ -14,8 +15,9 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final departureController = TextEditingController();
+    final arrivalController = TextEditingController();
     final size = AppLayout.getSize(context);
-    final TextEditingController departureController = TextEditingController();
     return  Scaffold(
       backgroundColor: Styles.bgColor,
       body: ListView(
@@ -115,7 +117,8 @@ class SearchScreen extends StatelessWidget {
                     Icon(Icons.flight_land_rounded, color: const Color(0xFFBFC2DF),),
                     Gap(AppLayout.getWidth(10)),
                     Expanded(
-                      child: TextField(
+                      child: TextFormField(
+                        controller: arrivalController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Arrival",
@@ -132,11 +135,15 @@ class SearchScreen extends StatelessWidget {
           Gap(AppLayout.getHeight(25)),
           GestureDetector(
             onTap: () {
-              if (departureController.text.isNotEmpty) {
+              if (departureController.text.isNotEmpty && arrivalController.text.isNotEmpty ) {
+                CollectionReference collRef = FirebaseFirestore.instance.collection('search');
+                collRef.add({
+                  'departure' : departureController.text,
+                  'arrival' : arrivalController.text,
+                });
                 Navigator.pushNamed(
                   context,
-                  '/form',
-                  arguments: {'departure': departureController.text},
+                  '/form'
                 );
                 FocusScope.of(context).requestFocus(new FocusNode());
               } else {
@@ -154,7 +161,7 @@ class SearchScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "find tickets",
+                  "create tickets",
                   style: Styles.textStyle.copyWith(color: Colors.white),
                 ),
               ),

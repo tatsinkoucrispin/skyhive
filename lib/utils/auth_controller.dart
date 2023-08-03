@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/login_page.dart';
+import '../screens/profile_screen.dart';
 import '../screens/welcome_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class AuthController extends GetxController{
       print("login page");
       Get.offAll(()=>LoginPage());
     } else {
-      Get.offAll(()=>WelcomePage(email:user.email!));
+      Get.offAll(()=>ProfileScreen(email:user.email!));
     }
   }
   void register(String email, password)async{

@@ -3,7 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:skyhive/screens/singup_page.dart';
 import 'package:get/get.dart';
+import 'package:skyhive/screens/ticket_screen.dart';
 import '../utils/app_styles.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../utils/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Map<String, dynamic>? paymentIntentData;
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   @override
@@ -154,8 +159,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 70,),
             GestureDetector(
-              onTap: (){
+              onTap: ()async{
                 AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
+                await makePayment();
               },
               child: Container(
                 width: w*0.5,
@@ -200,5 +206,61 @@ class _LoginPageState extends State<LoginPage> {
         ),
       )
     );
+  }
+  Future<void> makePayment()async{
+    try{
+      paymentIntentData = await createPaymentIntent('20','USD');
+      await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: paymentIntentData!['client_secret'],
+              style: ThemeMode.dark,
+              merchantDisplayName: 'Tatsinkou'
+          )
+      );
+      displayPaymentSheet(context);
+    }catch(e){
+      print('exception'+e.toString());
+    }
+  }
+  displayPaymentSheet(BuildContext context) async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        // success state
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => TicketScreen()),
+        );
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paid successfully")));
+    } on StripeError catch (e) {
+      print(e.toString());
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          content: Text("Cancelled"),
+        ),
+      );
+    }
+  }
+  createPaymentIntent(String amount, String currency)async{
+    try{
+      Map<String , dynamic> body ={
+        'amount': calculateAmount(amount),
+        'currency':currency,
+        'payment_method_types[]':'card'
+      };
+      http.Response response = await http.post(Uri.parse("https://api.stripe.com/v1/payment_intents"),
+          body: body,
+          headers: {
+            'Authorization':'Bearer sk_test_51NOxOLKaCctTIWKDVn2EgDxpUtPJK329qf8EvzlFGWuX54oS0ttpGpO0pSBk472r8bOFqeAaBPiacSaAkvxVweGd00yKZ8EIrw',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          });
+      return json.decode(response.body.toString());
+    }catch(e){
+      print('exception'+e.toString());
+    }
+  }
+  calculateAmount(String amount){
+    final price = int.parse(amount)*100;
+    return price.toString() ;
   }
 }

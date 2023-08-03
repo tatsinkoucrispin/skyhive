@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import '../utils/app_styles.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
+
+import 'login_page.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({Key? key}) : super(key: key);
-
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
 
 class _FormScreenState extends State<FormScreen> {
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
   String valueChoose = "Premiere";
   List<String> listItem = ["Premiere", "Business", "Economic"];
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -54,14 +61,14 @@ class _FormScreenState extends State<FormScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
                   enabledBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
@@ -70,9 +77,11 @@ class _FormScreenState extends State<FormScreen> {
             ),
             Padding(padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
               child: TextFormField(
+                controller: arrivalController,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                onChanged: onArrivalValueChanged,
                 decoration: InputDecoration(
                   hintText: "Arrival",
                   hintStyle: Styles.textStyle.copyWith(color: Colors.grey),
@@ -80,14 +89,14 @@ class _FormScreenState extends State<FormScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
                   enabledBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
@@ -106,14 +115,14 @@ class _FormScreenState extends State<FormScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
                   enabledBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
@@ -131,14 +140,14 @@ class _FormScreenState extends State<FormScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
                   enabledBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: const BorderSide(
-                      color: Colors.white,
+                      color: Color(0xFF526799),
                       width: 1.5,
                     ),
                   ),
@@ -179,41 +188,83 @@ class _FormScreenState extends State<FormScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-              child: TextFormField(
-                keyboardType: TextInputType.text,
-                enabled: false, // désactiver le champ
-                decoration: InputDecoration(
-                  hintText: "Price",
-                  //prefixIcon: Icon(icons),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.white,
-                      width: 1.5,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: SizedBox(
+                    width: 120,
+                    height: 50,
+                    child: GestureDetector(
+                      onTap: () {
+                        _selectTime(context);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFF526799)),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${_selectedTime.hourOfPeriod.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')} ${_selectedTime.period == DayPeriod.am ? 'AM' : 'PM'}',
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                            Icon(Icons.arrow_drop_down),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.white,
-                      width: 1.5,
-                    ),
-                  ),
-                  // définir la couleur de fond et de texte pour le champ désactivé
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                  hintStyle: TextStyle(color: Colors.grey[500]),
                 ),
-              ),
+                Spacer(),
+                    SizedBox(
+                    width: 140,
+                    height: 50,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFF526799)),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedDate != null
+                                    ? DateFormat('dd MMM', 'en_US').format(selectedDate)
+                                    : 'Aucune date sélectionnée',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: IconButton(
+                                icon: Icon(Icons.calendar_today),
+                                onPressed: () => _selectDate(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
+            const SizedBox(height: 20.0),
             SizedBox(
               width: 200,
               height: 50,
               child: ElevatedButton(
-                onPressed: ()async {
-                    makePayment();
+                onPressed: () {
+                    // await makePayment();
+                  Get.to(()=>LoginPage());
                   // if (_formkey.currentState!.validate()) {
                   //   await makePayment();
                   // } else {
@@ -241,55 +292,35 @@ class _FormScreenState extends State<FormScreen> {
       ),
     );
   }
-  void makePayment()async{
-    try{
-      paymentIntentData = await createPaymentIntent('20','USD');
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntentData!['client_secret'],
-              style: ThemeMode.dark,
-              merchantDisplayName: 'Tatsinkou'
-          )
-      );
-      displayPaymentSheet();
-    }catch(e){
-      print('exception'+e.toString());
-    }
-  }
-  displayPaymentSheet() async{
-    try{
-      await Stripe.instance.presentPaymentSheet().then((value) => {
-        //success State
-        print("Payement Succesful")
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+
+    if (pickedTime != null && pickedTime != _selectedTime) {
+      setState(() {
+        _selectedTime = pickedTime;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paid succesfully")));
-    } on StripeError catch (e){
-      print(e.toString());
-      showDialog(context: context, builder: (_) => AlertDialog(
-        content: Text("Cancelled"),
-      ));
     }
   }
-  createPaymentIntent(String amount, String currency)async{
-    try{
-      Map<String , dynamic> body ={
-        'amount': calculateAmount(amount),
-        'currency':currency,
-        'payment_method_types[]':'card'
-      };
-      http.Response response = await http.post(Uri.parse("https://api.stripe.com/v1/payment_intents"),
-          body: body,
-          headers: {
-            'Authorization':'Bearer sk_test_51NOxOLKaCctTIWKDVn2EgDxpUtPJK329qf8EvzlFGWuX54oS0ttpGpO0pSBk472r8bOFqeAaBPiacSaAkvxVweGd00yKZ8EIrw',
-            'Content-Type': 'application/x-www-form-urlencoded',
-          });
-      return json.decode(response.body.toString());
-    }catch(e){
-      print('exception'+e.toString());
+  void _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
     }
   }
-  calculateAmount(String amount){
-    final price = int.parse(amount)*100;
-    return price.toString() ;
+  TextEditingController arrivalController = TextEditingController();
+
+  void onArrivalValueChanged(String value) {
+    // Logique à exécuter lorsque la valeur de l'arrivée change
   }
 }

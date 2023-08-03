@@ -2,6 +2,8 @@ import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:skyhive/screens/ticket_view.dart';
 import 'package:skyhive/utils/app_info_list.dart';
 import 'package:skyhive/widgets/column_layout.dart';
@@ -12,8 +14,11 @@ import '../utils/app_styles.dart';
 import '../widgets/layout_builder_widget.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
+import 'history_screen.dart';
+
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  String email;
+  ProfileScreen({super.key,required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Text("Book Tickets", style: Styles.headLineStyle1,),
                   Gap(AppLayout.getHeight(2)),
-                  Text("New-York", style: TextStyle(
+                  Text(email, style: TextStyle(
                     fontSize: 14, fontWeight: FontWeight.w500,color: Colors.grey.shade500
                   )),
                   Gap(AppLayout.getHeight(8)),
@@ -83,10 +88,10 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: (){
-                      print("You are tapped");
+                      Get.to(()=>HistoryScreen());
                     },
                     child: Text(
-                      "Edit",
+                      "History",
                       style:Styles.textStyle.copyWith(color:Styles.primaryColor,fontWeight: FontWeight.w300)
                     ),
                   )

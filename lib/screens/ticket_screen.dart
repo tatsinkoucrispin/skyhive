@@ -10,6 +10,8 @@ import '../utils/app_styles.dart';
 import '../widgets/layout_builder_widget.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
+import 'form_screen.dart';
+
 class TicketScreen extends StatelessWidget {
   const TicketScreen({super.key});
 
@@ -49,8 +51,8 @@ class TicketScreen extends StatelessWidget {
                         alignment: CrossAxisAlignment.start,isColor: false,
                       ),
                       AppColumnLayout(
-                        firstText: '5221 364869',
-                        secondText: 'passport',
+                        firstText: 'Bussiness',
+                        secondText: 'class',
                         alignment: CrossAxisAlignment.end,isColor: false,
                       )
                     ],
@@ -140,7 +142,7 @@ class TicketScreen extends StatelessWidget {
             Gap(AppLayout.getHeight(20)),
             GestureDetector(
               onTap: () {
-
+                FormScreen();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(
@@ -148,7 +150,7 @@ class TicketScreen extends StatelessWidget {
                   horizontal: AppLayout.getWidth(8),
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFFF37B67),
+                  color: Color(0xFF526799),
                   borderRadius: BorderRadius.circular(AppLayout.getWidth(10)),
                 ),
                 child: Center(

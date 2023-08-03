@@ -41,11 +41,13 @@ dependencies:
   google_sign_in: ^6.1.4
   flutter_facebook_auth: ^6.0.0
   twitter_login: ^4.4.1
+  cloud_firestore: ^4.8.4
+  intl: ^0.18.1
   pdf: ^3.10.4
   google_fonts: ^5.1.0
   fluentui_icons: ^1.0.0
   gap: ^3.0.1
-  flutter_stripe: ^2.0.1
+  flutter_stripe: ^9.3.0
   http: ^1.1.0
 
 
