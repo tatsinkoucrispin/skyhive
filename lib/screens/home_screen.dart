@@ -1,13 +1,9 @@
-import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:skyhive/screens/ticket_view.dart';
-import 'package:skyhive/widgets/double_text_widget.dart';
 
 import '../utils/app_info_list.dart';
 import '../utils/app_styles.dart';
-import 'hotel_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

@@ -1,5 +1,4 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:skyhive/screens/profile_screen.dart';
 import 'package:skyhive/screens/search_screen.dart';
@@ -16,11 +15,19 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int _selectedIndex=0;
-  static final List<Widget>_widgetOptions =<Widget>[
+  static final List<Widget>_widgetOptions = <Widget>[
     const HomeScreen(),
     const SearchScreen(),
-    const TicketScreen(),
-    ProfileScreen(email: '',),
+    TicketScreen(
+        passengerController: '',
+        valueChoose: '',
+        departure: '',
+        arrival: '',
+        date:'',
+        heure: ''),
+    ProfileScreen(
+      email: '',
+    ),
   ];
 
   void _onItemTapped(int index){

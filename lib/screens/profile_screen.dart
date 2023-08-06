@@ -11,6 +11,7 @@ import 'package:skyhive/widgets/ticket_taps.dart';
 
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
+import '../utils/auth_controller.dart';
 import '../widgets/layout_builder_widget.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
@@ -240,13 +241,26 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           Gap(AppLayout.getHeight(25)),
-          InkWell(
-            onTap: ()=>print("you are tapped"),
-            child: Center(
-              child: Text("How to get more miles",
-                style: Styles.textStyle.copyWith(
-                    color: Styles.primaryColor,
-                    fontWeight: FontWeight.w500
+          Center(
+            child: SizedBox(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  AuthController.instance.logOut();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFDA3246),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  "Log Out",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

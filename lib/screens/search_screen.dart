@@ -143,7 +143,17 @@ class SearchScreen extends StatelessWidget {
                 saveData(departure, arrival);
                 Get.to(()=>FormScreen());
               } else {
-                // Afficher un message d'erreur ou faire une action en cas de champ vide
+                Get.snackbar("About Ticket", "Ticket message",
+                    backgroundColor: Colors.redAccent,
+                    snackPosition: SnackPosition.BOTTOM,
+                    titleText: Text(
+                      "Please fill in the arrival and departure fields",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    messageText: Text(
+                      "",
+                      style: TextStyle(color: Colors.white),
+                    ));
               }
             },
             child: Container(

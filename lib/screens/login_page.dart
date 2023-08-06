@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:skyhive/screens/singup_page.dart';
-import 'package:get/get.dart';
-import 'package:skyhive/screens/ticket_screen.dart';
-import '../utils/app_styles.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:skyhive/screens/singup_page.dart';
+import 'package:skyhive/screens/ticket_screen.dart';
+
+import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -161,9 +162,14 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               onTap: (){
                 AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
-                Get.toNamed('/ticket');
-                // Navigator.popUntil(context, ModalRoute.withName('/ticket'));
-                //await makePayment();
+                makePayment();
+                Get.to(()=> TicketScreen(
+                    passengerController: '',
+                    valueChoose: '',
+                    departure: '',
+                    arrival: '',
+                    date: '',
+                    heure: ''));
               },
               child: Container(
                 width: w*0.5,
@@ -188,52 +194,53 @@ class _LoginPageState extends State<LoginPage> {
             RichText(text: TextSpan(
               text: "Don\'t have an account?",
               style: TextStyle(
-                color: Colors.grey[500],
-                fontSize: 20
-              ),
-              children:  [
-                TextSpan(
-                text: " Create",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
-                  recognizer: TapGestureRecognizer()..onTap=()=>Get.to(()=>SignUpPage())
-                ),
-              ]
-            )
-            )
-          ],
-        ),
-      )
-    );
+                color: Colors.grey[500], fontSize: 20),
+                      children: [
+                    TextSpan(
+                        text: " Create",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => Get.to(() => SignUpPage())),
+                  ]))
+            ],
+          ),
+        ));
   }
-  Future<void> makePayment()async{
-    try{
-      paymentIntentData = await createPaymentIntent('20','USD');
+
+  void makePayment() async {
+    try {
+      paymentIntentData = await createPaymentIntent();
+      var gpay = const PaymentSheetGooglePay(
+          merchantCountryCode: "US", currencyCode: "US", testEnv: true);
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: paymentIntentData!['client_secret'],
-              style: ThemeMode.dark,
-              merchantDisplayName: 'Tatsinkou'
-          )
-      );
+        paymentIntentClientSecret: paymentIntentData!['client_secret'],
+        style: ThemeMode.dark,
+        merchantDisplayName: 'Tatsinkou',
+        googlePay: gpay,
+      ));
       displayPaymentSheet(context);
-    }catch(e){
-      print('exception'+e.toString());
+    } catch (e) {
+      print('exception' + e.toString());
     }
   }
-  displayPaymentSheet(BuildContext context) async {
+  void displayPaymentSheet(BuildContext context) async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) {
-        // success state
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => TicketScreen()),
-        );
-      });
+      await Stripe.instance.presentPaymentSheet();
+      //     .then((value) {
+      //       Get.to(()=> TicketScreen(
+      //           passengerController: '',
+      //           valueChoose: '',
+      //           departure: '',
+      //           arrival: '',
+      //           date: '',
+      //           heure: ''));
+      // });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paid successfully")));
-    } on StripeError catch (e) {
+    } catch (e) {
       print(e.toString());
       showDialog(
         context: context,
@@ -243,26 +250,24 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
-  createPaymentIntent(String amount, String currency)async{
-    try{
-      Map<String , dynamic> body ={
-        'amount': calculateAmount(amount),
-        'currency':currency,
-        'payment_method_types[]':'card'
+
+  createPaymentIntent() async {
+    try {
+      Map<String, dynamic> body = {
+        "amount": "1000",
+        "currency": "USD",
       };
-      http.Response response = await http.post(Uri.parse("https://api.stripe.com/v1/payment_intents"),
+      http.Response response = await http.post(
+          Uri.parse("https://api.stripe.com/v1/payment_intents"),
           body: body,
           headers: {
-            'Authorization':'Bearer sk_test_51NOxOLKaCctTIWKDVn2EgDxpUtPJK329qf8EvzlFGWuX54oS0ttpGpO0pSBk472r8bOFqeAaBPiacSaAkvxVweGd00yKZ8EIrw',
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Authorization":
+                "Bearer sk_test_51Nc3HLC1jv8DywGjwjesmlu1aCsQ1TTUJzX3T6eRzhGftNXLb105HpBoPbUNXOVHOKQIWOm5nHs1atSVYno8T45y00g60LYwc0",
+            "Content-Type": "application/x-www-form-urlencoded",
           });
-      return json.decode(response.body.toString());
+      return json.decode(response.body);
     }catch(e){
-      print('exception'+e.toString());
+      throw Exception(e.toString());
     }
-  }
-  calculateAmount(String amount){
-    final price = int.parse(amount)*100;
-    return price.toString() ;
   }
 }

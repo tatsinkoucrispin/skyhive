@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:skyhive/screens/bottom_bar.dart';
 import 'package:skyhive/screens/form_screen.dart';
 import 'package:skyhive/screens/home_screen.dart';
@@ -7,18 +10,15 @@ import 'package:skyhive/screens/login_page.dart';
 import 'package:skyhive/screens/search_screen.dart';
 import 'package:skyhive/screens/ticket_screen.dart';
 import 'package:skyhive/utils/app_styles.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:get/get.dart';
 import 'package:skyhive/utils/auth_controller.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
    await Firebase.initializeApp().then((value) => Get.put(AuthController()));
   //
-  Stripe.publishableKey = 'pk_test_51NOxOLKaCctTIWKDXJbWi0zdnVs1POVOYCdHuGMbbXGZtV8NuncmGNly7QdwSrJ4avg7u6FkC92IvDqBVlZwv7V100VlGKxfkw';
   initializeDateFormatting('en_US', null).then((_){
-    runApp(const MyApp());
+    Stripe.publishableKey = 'pk_test_51Nc3HLC1jv8DywGjFkVhB1N862aOBWmRn12t9HxjZBUqYTJP0xNQv91q9Tcz0cNRuwJ11Z8S2a7pLiJSxxI95P4U00fl08pKEZ';
+    runApp(MyApp());
   });
 }
 
@@ -49,7 +49,14 @@ class MyApp extends StatelessWidget {
           case '/home':
             return MaterialPageRoute(builder: (_) => const HomeScreen());
           case '/ticket':
-            return MaterialPageRoute(builder: (_) => const TicketScreen());
+            return MaterialPageRoute(
+                builder: (_) => TicketScreen(
+                    passengerController: '',
+                    valueChoose: '',
+                    departure: '',
+                    arrival: '',
+                    date: '',
+                    heure: ''));
         }
       },
     );

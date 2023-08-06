@@ -1,11 +1,6 @@
-import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screens/login_page.dart';
-import '../screens/profile_screen.dart';
-import '../screens/welcome_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:get/get.dart';
 
 class AuthController extends GetxController{
   //AuthController.instance..
