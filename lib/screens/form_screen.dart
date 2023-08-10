@@ -15,22 +15,30 @@ import 'increment.dart';
 import 'login_page.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({Key? key}) : super(key: key);
+  final String? departureValue;
+  final String? arrivalValue;
+
+  const FormScreen({Key? key, this.departureValue, this.arrivalValue})
+      : super(key: key);
 
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
+
 class _FormScreenState extends State<FormScreen> {
   @override
   void initState() {
     super.initState();
-    getSavedData();
+    if (widget.departureValue != null) {
+      departureController.text = widget.departureValue!;
+    }
+    if (widget.arrivalValue != null) {
+      arrivalController.text = widget.arrivalValue!;
+    }
+    saveFormData();
   }
   TextEditingController departureController = TextEditingController();
   TextEditingController arrivalController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController classController = TextEditingController();
-  TextEditingController heureController = TextEditingController();
   TextEditingController passengerController = TextEditingController();
   late String _selectedTime;
   DateTime selectedDate = DateTime.now();
@@ -329,7 +337,7 @@ class _FormScreenState extends State<FormScreen> {
                               String passenger = passengerController.text;
                               saveData(departure, arrival, passenger);
                               saveFormData;
-                              Provider.of<IncrementModel>(context, listen: false).increment();
+                              //Provider.of<IncrementModel>(context, listen: false).increment();
                               TicketScreen(
                                     passengerController: passengerController.text,
                                     valueChoose: valueChoose,
@@ -340,7 +348,17 @@ class _FormScreenState extends State<FormScreen> {
                                   );
                               Get.to(()=>LoginPage());
                             } else {
-                              // Afficher un message d'erreur ou faire une action en cas de champ vide
+                              Get.snackbar("About Ticket", "Ticket message",
+                                  backgroundColor: Colors.redAccent,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  titleText: Text(
+                                    "Please fill in the arrival,departure and name fields",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  messageText: Text(
+                                    "",
+                                    style: TextStyle(color: Colors.white),
+                                  ));
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -397,29 +415,14 @@ class _FormScreenState extends State<FormScreen> {
     }
   }
 
-  Future<void> getSavedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    departureController.text = prefs.getString('departure') ?? '';
-    arrivalController.text = prefs.getString('arrival') ?? '';
-    dateController.text = prefs.getString('date') ?? '';
-    classController.text = prefs.getString('class') ?? '';
-    heureController.text = prefs.getString('heure') ?? '';
-    passengerController.text = prefs.getString('passenger') ?? '';
-    valueChoose = prefs.getString('classChoice') ?? 'Premiere';
-    valueChoose2 = prefs.getString('timeChoice') ?? '06:00AM';
-    setState(() {});
-  }
-
   void saveFormData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('departure', departureController.text);
-    prefs.setString('arrival', arrivalController.text);
-    prefs.setString('date', dateController.text);
-    prefs.setString('class', classController.text);
-    prefs.setString('heure', heureController.text);
-    prefs.setString('passenger', passengerController.text);
-    prefs.setString('classChoice', valueChoose);
-    prefs.setString('timeChoice', valueChoose2);
+    prefs.setString('', departureController.text);
+    prefs.setString('', arrivalController.text);
+    prefs.setString('', selectedDate.toString());
+    prefs.setString('', passengerController.text);
+    prefs.setString('', valueChoose);
+    prefs.setString('', valueChoose2);
   }
 
   Future<void> saveData(
@@ -433,7 +436,7 @@ class _FormScreenState extends State<FormScreen> {
         'arrival': arrival,
         'class': valueChoose,
         'heure': valueChoose2,
-        'date': selectedDate,
+        'date': selectedDate.toString(),
         'passenger': passenger
       });
       print('Data saved successfully!');

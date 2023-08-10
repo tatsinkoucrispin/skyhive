@@ -9,6 +9,7 @@ import 'package:skyhive/screens/home_screen.dart';
 import 'package:skyhive/screens/login_page.dart';
 import 'package:skyhive/screens/search_screen.dart';
 import 'package:skyhive/screens/ticket_screen.dart';
+import 'package:skyhive/stripe_payment/stripe_keys.dart';
 import 'package:skyhive/utils/app_styles.dart';
 import 'package:skyhive/utils/auth_controller.dart';
 
@@ -17,7 +18,7 @@ void main()async {
    await Firebase.initializeApp().then((value) => Get.put(AuthController()));
   //
   initializeDateFormatting('en_US', null).then((_){
-    Stripe.publishableKey = 'pk_test_51Nc3HLC1jv8DywGjFkVhB1N862aOBWmRn12t9HxjZBUqYTJP0xNQv91q9Tcz0cNRuwJ11Z8S2a7pLiJSxxI95P4U00fl08pKEZ';
+    Stripe.publishableKey = ApiKeys.publishableKey;
     runApp(MyApp());
   });
 }

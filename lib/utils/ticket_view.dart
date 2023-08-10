@@ -11,8 +11,9 @@ import 'package:intl/intl.dart';
 import '../widgets/column_layout.dart';
 import 'dart:math';
 import '../widgets/layout_builder_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TicketViews extends StatelessWidget {
+class TicketViews extends StatefulWidget {
 
   final bool? isColor;
   String departure;
@@ -20,14 +21,16 @@ class TicketViews extends StatelessWidget {
   String heure;
   String date;
 
-  TicketViews(
-      {super.key,
-      this.isColor,
-      required this.departure,
-      required this.arrival,
-      required this.heure,
-      required this.date});
-
+  TicketViews({Key? key,
+    this.isColor,
+    required this.departure,
+    required this.arrival,
+    required this.heure,
+    required this.date}): super(key: key);
+  @override
+  _TicketViewsState createState() => _TicketViewsState();
+}
+class _TicketViewsState extends State<TicketViews> {
   @override
   Widget build(BuildContext context) {
     int generateRandomNumber(List<int> generatedNumbers) {
@@ -41,13 +44,12 @@ class TicketViews extends StatelessWidget {
       generatedNumbers.add(randomNumber);
       return randomNumber;
     }
-
     List<int> generatedNumbers = [];
-
+    late SharedPreferences _prefs;
     String firstText = generateRandomNumber(generatedNumbers).toString();
     String secondText = "Number";
-    DateTime parsedDate = DateTime.parse(date);
-    String formattedDate = DateFormat('dd MMM').format(parsedDate);
+    DateTime parsedDate = DateTime.parse(widget.date);
+    // String formattedDate = DateFormat('dd MMM').format(parsedDate);
     final size = AppLayout.getSize(context);
     return SizedBox(
       width: size.width * 0.85,
@@ -64,7 +66,7 @@ class TicketViews extends StatelessWidget {
               */
               Container(
                 decoration: BoxDecoration(
-                    color: isColor == null ? Color(0xFF526799) : Colors.white,
+                    color: widget.isColor == null ? Color(0xFF526799) : Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(AppLayout.getHeight(21)),
                         topRight: Radius.circular(AppLayout.getHeight(21)))),
@@ -74,8 +76,8 @@ class TicketViews extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          departure.substring(0, 3).toUpperCase(),
-                          style: isColor == null
+                          widget.departure.substring(0, 3).toUpperCase(),
+                          style: widget.isColor == null
                               ? Styles.headLineStyle3
                                   .copyWith(color: Colors.white)
                               : Styles.headLineStyle3,
@@ -93,7 +95,7 @@ class TicketViews extends StatelessWidget {
                               child: Transform.rotate(
                                   angle: 1.5,
                                   child: Icon(Icons.local_airport_rounded,
-                                      color: isColor == null
+                                      color: widget.isColor == null
                                           ? Colors.white
                                           : Color(0xFF8ACCF7))),
                             ),
@@ -102,8 +104,8 @@ class TicketViews extends StatelessWidget {
                         ThickContainer(isColor: true),
                         Expanded(child: Container()),
                         Text(
-                          arrival.substring(0, 3).toUpperCase(),
-                            style: isColor == null
+                            widget.arrival.substring(0, 3).toUpperCase(),
+                            style: widget.isColor == null
                                 ? Styles.headLineStyle3.copyWith(
                                     color: Colors.white,
                                   )
@@ -117,8 +119,8 @@ class TicketViews extends StatelessWidget {
                         SizedBox(
                           width: AppLayout.getWidth(100),
                           child: Text(
-                            departure,
-                            style: isColor == null
+                            widget.departure,
+                            style: widget.isColor == null
                                 ? Styles.headLineStyle4
                                     .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
@@ -126,7 +128,7 @@ class TicketViews extends StatelessWidget {
                         ),
                         Text(
                           "8H 20M",
-                          style: isColor == null
+                          style: widget.isColor == null
                               ? Styles.headLineStyle3
                                   .copyWith(color: Colors.white)
                               : Styles.headLineStyle3,
@@ -134,9 +136,9 @@ class TicketViews extends StatelessWidget {
                         SizedBox(
                           width: AppLayout.getWidth(100),
                           child: Text(
-                            arrival,
+                            widget.arrival,
                             textAlign: TextAlign.end,
-                            style: isColor == null
+                            style: widget.isColor == null
                                 ? Styles.headLineStyle4
                                     .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
@@ -151,7 +153,7 @@ class TicketViews extends StatelessWidget {
               * showing the orange part of the card/ticket
               * */
               Container(
-                color: isColor == null ? Styles.orangeColor : Colors.white,
+                color: widget.isColor == null ? Styles.orangeColor : Colors.white,
                 child: Row(
                   children: [
                     SizedBox(
@@ -159,7 +161,7 @@ class TicketViews extends StatelessWidget {
                       width: AppLayout.getWidth(10),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                            color: isColor == null
+                            color: widget.isColor == null
                                 ? Colors.grey.shade200
                                 : Colors.white,
                             borderRadius: BorderRadius.only(
@@ -184,7 +186,7 @@ class TicketViews extends StatelessWidget {
                                     height: 1,
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                          color: isColor == null
+                                          color: widget.isColor == null
                                               ? Colors.white
                                               : Colors.grey.shade300),
                                     ))),
@@ -197,7 +199,7 @@ class TicketViews extends StatelessWidget {
                       width: 10,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                            color: isColor == null
+                            color: widget.isColor == null
                                 ? Colors.grey.shade200
                                 : Colors.white,
                             borderRadius: const BorderRadius.only(
@@ -213,11 +215,11 @@ class TicketViews extends StatelessWidget {
               * */
               Container(
                 decoration: BoxDecoration(
-                    color: isColor == null ? Styles.orangeColor : Colors.white,
+                    color: widget.isColor == null ? Styles.orangeColor : Colors.white,
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(isColor == null ? 21 : 0),
+                        bottomLeft: Radius.circular(widget.isColor == null ? 21 : 0),
                         bottomRight:
-                            Radius.circular(isColor == null ? 21 : 0))),
+                            Radius.circular(widget.isColor == null ? 21 : 0))),
                 padding: const EdgeInsets.only(
                     left: 16, top: 10, right: 16, bottom: 16),
                 child: Column(
@@ -226,20 +228,20 @@ class TicketViews extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AppColumnLayout(
-                            firstText: formattedDate,
+                            firstText: parsedDate.toString(),
                             secondText: "Date",
                             alignment: CrossAxisAlignment.start,
-                            isColor: isColor),
+                            isColor: widget.isColor),
                         AppColumnLayout(
-                            firstText: heure,
+                            firstText: widget.heure,
                             secondText: "Departure time",
                             alignment: CrossAxisAlignment.center,
-                            isColor: isColor),
+                            isColor: widget.isColor),
                         AppColumnLayout(
                             firstText: firstText,
                             secondText: secondText,
                             alignment: CrossAxisAlignment.end,
-                            isColor: isColor),
+                            isColor: widget.isColor),
                       ],
                     )
                   ],

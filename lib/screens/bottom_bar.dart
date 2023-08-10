@@ -23,7 +23,7 @@ class _BottomBarState extends State<BottomBar> {
         valueChoose: '',
         departure: '',
         arrival: '',
-        date:'',
+        date: '',
         heure: ''),
     ProfileScreen(
       email: '',

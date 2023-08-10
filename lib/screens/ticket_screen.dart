@@ -48,14 +48,13 @@ class TicketScreen extends StatefulWidget {
   late final String date;
   late final String heure;
 
-  TicketScreen(
-      {Key? key,
-        required this.passengerController,
-        required this.valueChoose,
-        required this.departure,
-        required this.arrival,
-        required this.date,
-        required this.heure})
+  TicketScreen({Key? key,
+    required this.passengerController,
+    required this.valueChoose,
+    required this.departure,
+    required this.arrival,
+    required this.date,
+    required this.heure})
       : super(key: key);
 
   @override
@@ -141,11 +140,11 @@ class _TicketScreenState extends State<TicketScreen> {
                 "Tickets",
                 style: Styles.headLineStyle1,
               ),
+              // Gap(AppLayout.getHeight(20)),
+              //     const AppTicketTabs(firstTab: "Upcoming", secondTab: "Previous"),
               Gap(AppLayout.getHeight(20)),
-                  const AppTicketTabs(firstTab: "Upcoming", secondTab: "Previous"),
-                  Gap(AppLayout.getHeight(20)),
-                  Container(
-                    padding: EdgeInsets.only(left: AppLayout.getHeight(15)),
+              Container(
+                padding: EdgeInsets.only(left: AppLayout.getHeight(15)),
                 child: TicketViews(
                   isColor: true,
                   departure: widget.departure,
@@ -354,14 +353,13 @@ class _TicketScreenState extends State<TicketScreen> {
   }
   Future<void> initializeData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     setState(() {
-      widget.departure = prefs.getString('departure') ?? '';
-      widget.arrival = prefs.getString('arrival') ?? '';
-      widget.date = prefs.getString('date') ?? '';
-      widget.passengerController = prefs.getString('passenger') ?? '';
-      widget.valueChoose = prefs.getString('classChoice') ?? 'Premiere';
-      widget.heure = prefs.getString('timeChoice') ?? '06:00AM';
+      widget.departure = prefs.getString('') ?? '';
+      widget.arrival = prefs.getString('') ?? '';
+      widget.date = prefs.getString('date') ?? 'date';
+      widget.passengerController = prefs.getString('') ?? '';
+      widget.valueChoose = prefs.getString('') ?? '';
+      widget.heure = prefs.getString('') ?? '';
     });
   }
   Future<void> generatePDF() async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../utils/ticket_view.dart';
+import 'form_screen.dart';
 import 'increment.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -17,31 +18,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Get.back();
-            },
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<IncrementModel>(
+            create: (_) => IncrementModel(),
           ),
-          title: Text('History'),
-        ),
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          Consumer<IncrementModel>(
-            builder: (context, model, _) {
-              return TicketViews(
-                  departure: '',
-                  arrival: '',
-                  heure: '',
-                  date:'');
-            },
+        ],
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('History'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-            ],
-          ),
+          body: TicketViews(departure: "", arrival: "", heure: "", date: ""),
         ),
       ),
     );

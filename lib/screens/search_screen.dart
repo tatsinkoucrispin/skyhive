@@ -141,7 +141,10 @@ class SearchScreen extends StatelessWidget {
                 String departure = departureController.text;
                 String arrival = arrivalController.text;
                 saveData(departure, arrival);
-                Get.to(()=>FormScreen());
+                Get.to(() => FormScreen(
+                      departureValue: departureController.text,
+                      arrivalValue: arrivalController.text,
+                    ));
               } else {
                 Get.snackbar("About Ticket", "Ticket message",
                     backgroundColor: Colors.redAccent,
@@ -174,18 +177,20 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           Gap(AppLayout.getHeight(40)),
-          const AppDoubleTextWidget(bigText: "Upcoming Flights", smallText: "View all"),
+          const AppDoubleTextWidget(bigText: "Upcoming Flights", smallText: ""),
           Gap(AppLayout.getHeight(15)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 height: AppLayout.getHeight(425),
-                width: size.width*0.42,
-                padding: EdgeInsets.symmetric(horizontal: AppLayout.getHeight(15), vertical: AppLayout.getWidth(15)),
+                width: size.width * 0.42,
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppLayout.getHeight(15),
+                    vertical: AppLayout.getWidth(15)),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppLayout.getHeight(20)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(AppLayout.getHeight(20)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade200,

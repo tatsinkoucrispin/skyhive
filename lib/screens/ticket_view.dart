@@ -25,8 +25,11 @@ class TicketView extends StatelessWidget {
       child: Container(
         margin:  EdgeInsets.only(right: AppLayout.getHeight(16)),
         child: GestureDetector(
-          onTap: (){
-            Get.to(()=>FormScreen());
+          onTap: () {
+            Get.to(() => FormScreen(
+                  departureValue: ticket['from']['name'],
+                  arrivalValue: ticket['to']['name'],
+                ));
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
