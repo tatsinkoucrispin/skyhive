@@ -136,8 +136,22 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(left: 20),
             child: Column(
               children: filteredTickets.isNotEmpty
-                  ? filteredTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList()
-                  : ticketList.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+                  ? filteredTickets
+                  .map((singleTicket) => Column(
+                children: [
+                  TicketView(ticket: singleTicket),
+                  SizedBox(height: 8),
+                ],
+              ))
+                  .toList()
+                  : ticketList
+                  .map((singleTicket) => Column(
+                children: [
+                  TicketView(ticket: singleTicket),
+                  SizedBox(height: 8),
+                ],
+              ))
+                  .toList(),
             ),
           ),
         ],

@@ -118,7 +118,7 @@ class TicketScreenes extends StatelessWidget {
                     departure: departure,
                     arrival: arrival,
                     heure: heure,
-                    date: date,
+                    dates: date,
                   ),
                 ),
                 const SizedBox(height: 1,),

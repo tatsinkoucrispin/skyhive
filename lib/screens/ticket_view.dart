@@ -31,8 +31,7 @@ class TicketView extends StatelessWidget {
                   arrivalValue: ticket['to']['name'],
                 ));
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
             children: [
               /*
               showing the blue part of the card/ticket

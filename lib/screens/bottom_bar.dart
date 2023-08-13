@@ -19,12 +19,12 @@ class _BottomBarState extends State<BottomBar> {
     const HomeScreen(),
     const SearchScreen(),
     TicketScreen(
-        passengerController: '',
-        valueChoose: '',
-        departure: '',
-        arrival: '',
-        date: '',
-        heure: ''),
+        passengerController: 'Tatsinkou',
+        valueChoose: 'Premiere',
+        departure: 'Paris',
+        arrival: 'Cameroun',
+        dates: '26 May',
+        heure: '08:00 AM'),
     ProfileScreen(
       email: '',
     ),

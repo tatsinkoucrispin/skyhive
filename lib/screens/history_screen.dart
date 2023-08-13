@@ -34,7 +34,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               },
             ),
           ),
-          body: TicketViews(departure: "", arrival: "", heure: "", date: ""),
+          body: TicketViews(departure: "", arrival: "", heure: "", dates: ""),
         ),
       ),
     );

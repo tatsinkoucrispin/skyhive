@@ -122,7 +122,7 @@ class PDFPreviewScreen extends StatelessWidget {
                   departure: '',
                   arrival: '',
                   heure: '',
-                  date: '',
+                  dates: '',
                 ),
               ),
               const SizedBox(height: 1,),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skyhive/screens/ticket_view.dart';
 import 'package:skyhive/utils/app_info_list.dart';
@@ -45,7 +46,7 @@ class TicketScreen extends StatefulWidget {
   late final String valueChoose;
   late final String departure;
   late final String arrival;
-  late final String date;
+  String dates;
   late final String heure;
 
   TicketScreen({Key? key,
@@ -53,7 +54,7 @@ class TicketScreen extends StatefulWidget {
     required this.valueChoose,
     required this.departure,
     required this.arrival,
-    required this.date,
+    required this.dates,
     required this.heure})
       : super(key: key);
 
@@ -62,11 +63,11 @@ class TicketScreen extends StatefulWidget {
 }
 
 class _TicketScreenState extends State<TicketScreen> {
-  @override
-  void initState() {
-    super.initState();
-    initializeData();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initializeData();
+  // }
   @override
   Widget build(BuildContext context) {
     String generateRandomNumber() {
@@ -124,6 +125,9 @@ class _TicketScreenState extends State<TicketScreen> {
     String secondTexts = 'Price';
     String firstTexte = generateRandomString();
     String secondTexte = 'Booking code';
+    // DateTime parsedDate = DateTime.parse(widget.dates);
+    // String formattedDate = DateFormat('dd MMM').format(parsedDate);
+
     String firstText = generateRandomNumber();
     String secondText = 'Number of E-ticket';
     final size = AppLayout.getSize(context);
@@ -150,7 +154,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   departure: widget.departure,
                   arrival: widget.arrival,
                   heure: widget.heure,
-                  date: widget.date,
+                  dates: widget.dates,
                 ),
               ),
                   const SizedBox(height: 1,),
@@ -269,7 +273,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   departure: widget.departure,
                   arrival: widget.arrival,
                   heure: widget.heure,
-                  date:widget.date,
+                  dates: widget.dates,
                 ),
               ),
                   Gap(AppLayout.getHeight(20)),
@@ -351,17 +355,19 @@ class _TicketScreenState extends State<TicketScreen> {
             ])
     );
   }
-  Future<void> initializeData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      widget.departure = prefs.getString('') ?? '';
-      widget.arrival = prefs.getString('') ?? '';
-      widget.date = prefs.getString('date') ?? 'date';
-      widget.passengerController = prefs.getString('') ?? '';
-      widget.valueChoose = prefs.getString('') ?? '';
-      widget.heure = prefs.getString('') ?? '';
-    });
-  }
+  // Future<void> initializeData() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   DateTime parsedDate = DateTime.parse(widget.date);
+  //   String formattedDate = DateFormat('dd MMM').format(parsedDate);
+  //   setState(() {
+  //     widget.departure = prefs.getString('Paris') ?? 'Paris';
+  //     widget.arrival = prefs.getString('Cameroun') ?? 'Cameroun';
+  //     formattedDate = prefs.getString('date') ?? 'date';
+  //     widget.passengerController = prefs.getString('Tatsinkou') ?? 'Tatsinkou';
+  //     widget.valueChoose = prefs.getString('Bussiness') ?? 'Bussiness';
+  //     widget.heure = prefs.getString('08-00 AM') ?? '08-00 AM';
+  //   });
+  // }
   Future<void> generatePDF() async {
     final pdf = pw.Document();
     String generateRandomNumber() {

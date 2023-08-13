@@ -222,58 +222,57 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ));
   }
-
-  void makePayment() async {
-    try {
-      paymentIntentData = await createPaymentIntent();
-      var gpay = const PaymentSheetGooglePay(
-          merchantCountryCode: "US", currencyCode: "US", testEnv: true);
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-        paymentIntentClientSecret: paymentIntentData!['client_secret'],
-        style: ThemeMode.dark,
-        merchantDisplayName: 'Tatsinkou',
-        googlePay: gpay,
-      ));
-      displayPaymentSheet(context);
-    } catch (e) {
-      print('exception' + e.toString());
-    }
-  }
-  void displayPaymentSheet(BuildContext context) async {
-    try {
-      await Stripe.instance.presentPaymentSheet();
-      print("Paid successfully");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Paid successfully")),
-      );
-    } catch (e) {
-      print(e.toString());
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          content: Text("Cancelled"),
-        ),
-      );
-    }
-  }
-  createPaymentIntent() async {
-    try {
-      Map<String, dynamic> body = {
-        "amount": "1000",
-        "currency": "USD",
-      };
-      http.Response response = await http.post(
-          Uri.parse("https://api.stripe.com/v1/payment_intents"),
-          body: body,
-          headers: {
-            "Authorization":
-                "Bearer sk_test_51Nc3HLC1jv8DywGjwjesmlu1aCsQ1TTUJzX3T6eRzhGftNXLb105HpBoPbUNXOVHOKQIWOm5nHs1atSVYno8T45y00g60LYwc0",
-            "Content-Type": "application/x-www-form-urlencoded",
-          });
-      return json.decode(response.body);
-    }catch(e){
-      throw Exception(e.toString());
-    }
-  }
+  // void makePayment() async {
+  //   try {
+  //     paymentIntentData = await createPaymentIntent();
+  //     var gpay = const PaymentSheetGooglePay(
+  //         merchantCountryCode: "US", currencyCode: "US", testEnv: true);
+  //     await Stripe.instance.initPaymentSheet(
+  //         paymentSheetParameters: SetupPaymentSheetParameters(
+  //       paymentIntentClientSecret: paymentIntentData!['client_secret'],
+  //       style: ThemeMode.dark,
+  //       merchantDisplayName: 'Tatsinkou',
+  //       googlePay: gpay,
+  //     ));
+  //     displayPaymentSheet(context);
+  //   } catch (e) {
+  //     print('exception' + e.toString());
+  //   }
+  // }
+  // void displayPaymentSheet(BuildContext context) async {
+  //   try {
+  //     await Stripe.instance.presentPaymentSheet();
+  //     print("Paid successfully");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Paid successfully")),
+  //     );
+  //   } catch (e) {
+  //     print(e.toString());
+  //     showDialog(
+  //       context: context,
+  //       builder: (_) => AlertDialog(
+  //         content: Text("Cancelled"),
+  //       ),
+  //     );
+  //   }
+  // }
+  // createPaymentIntent() async {
+  //   try {
+  //     Map<String, dynamic> body = {
+  //       "amount": "1000",
+  //       "currency": "USD",
+  //     };
+  //     http.Response response = await http.post(
+  //         Uri.parse("https://api.stripe.com/v1/payment_intents"),
+  //         body: body,
+  //         headers: {
+  //           "Authorization":
+  //               "Bearer sk_test_51Nc3HLC1jv8DywGjwjesmlu1aCsQ1TTUJzX3T6eRzhGftNXLb105HpBoPbUNXOVHOKQIWOm5nHs1atSVYno8T45y00g60LYwc0",
+  //           "Content-Type": "application/x-www-form-urlencoded",
+  //         });
+  //     return json.decode(response.body);
+  //   }catch(e){
+  //     throw Exception(e.toString());
+  //   }
+  // }
 }

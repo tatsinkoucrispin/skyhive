@@ -21,57 +21,57 @@
 List<Map<String, dynamic>> ticketList = [
   {
     'from':{
-      'code':"CMR",
-      'name':"Cameroon"
+      'code':"DOU",
+      'name':"Douala-Cameroun"
     },
       'to':{
-       'code':"LDN",
-       'name':"London"
+       'code':"LON",
+       'name':"London-England"
       },
     'flying_time':"8H 30M",
-    'date':"1 MAY",
+    'date':"1 Aug",
     'departure_time':"08:00 AM",
     "number":23
   },
   {
     'from':{
-      'code':"CMR",
-      'name':"Cameroon"
+      'code':"YAO",
+      'name':"Yaounde-Cameroun"
     },
     'to':{
-      'code':"NYC",
-      'name':"New-York"
+      'code':"PAR",
+      'name':"Paris-France"
     },
     'flying_time':"4H 20M",
-    'date':"1 MAY",
+    'date':"3 May",
     'departure_time':"09:00 AM",
     "number":65
   },
   {
     'from':{
       'code':"DK",
-      'name':"Dhaka"
+      'name':"Dhaka-Bangladesh"
     },
     'to':{
       'code':"SH",
-      'name':"Shanghai"
+      'name':"Shanghai-Chine"
     },
     'flying_time':"4H 20M",
-    'date':"1 MAY",
+    'date':"1 May",
     'departure_time':"09:00 AM",
     "number":20
   },
   {
     'from':{
       'code':"PK",
-      'name':"Pekin"
+      'name':"Pekin-Chine"
     },
     'to':{
-      'code':"NYC",
-      'name':"New-York"
+      'code':"BER",
+      'name':"Berlin-Allemagne"
     },
     'flying_time':"8H 20M",
-    'date':"10 JUN",
+    'date':"10 Jun",
     'departure_time':"09:00 AM",
     "number":50
   },

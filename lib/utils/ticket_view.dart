@@ -16,17 +16,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TicketViews extends StatefulWidget {
 
   final bool? isColor;
-  String departure;
-  String arrival;
-  String heure;
-  String date;
+  late final String departure;
+  late final String arrival;
+  late final String heure;
+  String dates;
 
   TicketViews({Key? key,
     this.isColor,
     required this.departure,
     required this.arrival,
     required this.heure,
-    required this.date}): super(key: key);
+    required this.dates}): super(key: key);
   @override
   _TicketViewsState createState() => _TicketViewsState();
 }
@@ -48,8 +48,9 @@ class _TicketViewsState extends State<TicketViews> {
     late SharedPreferences _prefs;
     String firstText = generateRandomNumber(generatedNumbers).toString();
     String secondText = "Number";
-    DateTime parsedDate = DateTime.parse(widget.date);
+    // DateTime parsedDate = DateTime.parse(widget.dates);
     // String formattedDate = DateFormat('dd MMM').format(parsedDate);
+
     final size = AppLayout.getSize(context);
     return SizedBox(
       width: size.width * 0.85,
@@ -58,8 +59,7 @@ class _TicketViewsState extends State<TicketViews> {
         margin: EdgeInsets.only(right: AppLayout.getHeight(16)),
         child: GestureDetector(
           onTap: () {},
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
             children: [
               /*
               showing the blue part of the card/ticket
@@ -228,7 +228,7 @@ class _TicketViewsState extends State<TicketViews> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AppColumnLayout(
-                            firstText: parsedDate.toString(),
+                            firstText: widget.dates,
                             secondText: "Date",
                             alignment: CrossAxisAlignment.start,
                             isColor: widget.isColor),

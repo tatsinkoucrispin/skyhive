@@ -29,6 +29,8 @@ class _FormScreenState extends State<FormScreen> {
   @override
   void initState() {
     super.initState();
+    selectedDate = DateTime.now();
+    formattedDate = DateFormat('dd MMM').format(selectedDate);
     if (widget.departureValue != null) {
       departureController.text = widget.departureValue!;
     }
@@ -41,7 +43,8 @@ class _FormScreenState extends State<FormScreen> {
   TextEditingController arrivalController = TextEditingController();
   TextEditingController passengerController = TextEditingController();
   late String _selectedTime;
-  DateTime selectedDate = DateTime.now();
+  late DateTime selectedDate;
+  late String formattedDate;
   String valueChoose = "Premiere";
   List<String> listItem = ["Premiere", "Business", "Economic"];
   String valueChoose2 = "06:00AM";
@@ -338,15 +341,15 @@ class _FormScreenState extends State<FormScreen> {
                               saveData(departure, arrival, passenger);
                               saveFormData;
                               //Provider.of<IncrementModel>(context, listen: false).increment();
-                              TicketScreen(
+                              Get.offAll(()=>TicketScreen(
                                     passengerController: passengerController.text,
                                     valueChoose: valueChoose,
                                     departure: departureController.text,
                                     arrival: arrivalController.text,
-                                    date: selectedDate.toString(),
+                                    dates: formattedDate,
                                     heure: valueChoose2,
-                                  );
-                              Get.to(()=>LoginPage());
+                                  ));
+                              // Get.to(()=>LoginPage());
                             } else {
                               Get.snackbar("About Ticket", "Ticket message",
                                   backgroundColor: Colors.redAccent,
@@ -419,7 +422,7 @@ class _FormScreenState extends State<FormScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('', departureController.text);
     prefs.setString('', arrivalController.text);
-    prefs.setString('', selectedDate.toString());
+    prefs.setString('', formattedDate);
     prefs.setString('', passengerController.text);
     prefs.setString('', valueChoose);
     prefs.setString('', valueChoose2);
@@ -436,7 +439,7 @@ class _FormScreenState extends State<FormScreen> {
         'arrival': arrival,
         'class': valueChoose,
         'heure': valueChoose2,
-        'date': selectedDate.toString(),
+        'date': formattedDate,
         'passenger': passenger
       });
       print('Data saved successfully!');

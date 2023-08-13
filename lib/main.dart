@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                     valueChoose: '',
                     departure: '',
                     arrival: '',
-                    date: '',
+                    dates: '',
                     heure: ''));
         }
       },

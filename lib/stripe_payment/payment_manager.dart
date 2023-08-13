@@ -17,7 +17,7 @@ abstract class PaymentManager {
               valueChoose: '',
               departure: '',
               arrival: '',
-              date: '',
+              dates: '',
               heure: ''));
     } catch (error) {
       throw Exception(error.toString());
