@@ -341,14 +341,19 @@ class _FormScreenState extends State<FormScreen> {
                               saveData(departure, arrival, passenger);
                               saveFormData;
                               //Provider.of<IncrementModel>(context, listen: false).increment();
-                              Get.offAll(()=>TicketScreen(
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TicketScreen(
                                     passengerController: passengerController.text,
                                     valueChoose: valueChoose,
                                     departure: departureController.text,
                                     arrival: arrivalController.text,
                                     dates: formattedDate,
                                     heure: valueChoose2,
-                                  ));
+                                  ),
+                                ),
+                              );
                               // Get.to(()=>LoginPage());
                             } else {
                               Get.snackbar("About Ticket", "Ticket message",
