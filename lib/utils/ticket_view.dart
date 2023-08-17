@@ -16,41 +16,91 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TicketViews extends StatefulWidget {
 
   final bool? isColor;
-  late final String departure;
-  late final String arrival;
-  late final String heure;
+  String departure;
+  String arrival;
+  String heure;
   String dates;
 
-  TicketViews({Key? key,
-    this.isColor,
-    required this.departure,
-    required this.arrival,
-    required this.heure,
-    required this.dates}): super(key: key);
+  TicketViews(
+      {Key? key,
+      this.isColor,
+      required this.departure,
+      required this.arrival,
+      required this.heure,
+      required this.dates})
+      : super(key: key);
+
   @override
   _TicketViewsState createState() => _TicketViewsState();
 }
 class _TicketViewsState extends State<TicketViews> {
+  String secondText = "Number";
+  List<int> generatedNumbers = [];
+  late SharedPreferences _prefs;
+
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    //firstText = generateRandomNumber().toString();
+  }
+  int generateRandomNumber() {
+    Random random = Random();
+    int randomNumber = random.nextInt(100) + 1;
+
+    while (generatedNumbers.contains(randomNumber)) {
+      randomNumber = random.nextInt(100) + 1;
+    }
+
+    generatedNumbers.add(randomNumber);
+    return randomNumber;
+  }
+
+  String getFirstValue(String departure) {
+    if (departure == 'Douala-Cameroun') {
+      return '46';
+    } else if (departure == 'Yaounde-Cameroun') {
+      return '52';
+    } else if (departure == 'London-England') {
+      return '24';
+    } else if (departure == 'Paris-France') {
+      return '35';
+    } else if (departure == 'Dhaka-Bangladesh') {
+      return '75';
+    } else if (departure == 'Shanghai-Chine') {
+      return '63';
+    } else if (departure == 'Pekin-Chine') {
+      return '42';
+    } else if (departure == 'Berlin-Allemagne') {
+      return '41';
+    } else if (departure == 'Abuja-Nigeria') {
+      return '20';
+    } else if (departure == 'Bruxelles-Belgique') {
+      return '80';
+    } else if (departure == 'Niamey-Niger') {
+      return '10';
+    } else if (departure == 'Tunis-Tunisie') {
+      return '75';
+    } else if (departure == 'Brazzaville-Congo') {
+      return '45';
+    } else if (departure == 'Bamako-Mali') {
+      return '37';
+    } else if (departure == 'Ottawa-Canada') {
+      return '90';
+    } else if (departure == 'Tokyo-Japon') {
+      return '13';
+    }
+    else {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    int generateRandomNumber(List<int> generatedNumbers) {
-      Random random = Random();
-      int randomNumber = random.nextInt(100) + 1;
-
-      while (generatedNumbers.contains(randomNumber)) {
-        randomNumber = random.nextInt(100) + 1;
-      }
-
-      generatedNumbers.add(randomNumber);
-      return randomNumber;
-    }
-    List<int> generatedNumbers = [];
-    late SharedPreferences _prefs;
-    String firstText = generateRandomNumber(generatedNumbers).toString();
-    String secondText = "Number";
-    // DateTime parsedDate = DateTime.parse(widget.dates);
-    // String formattedDate = DateFormat('dd MMM').format(parsedDate);
-
+    String firstText = getFirstValue(widget.departure);
     final size = AppLayout.getSize(context);
     return SizedBox(
       width: size.width * 0.85,
@@ -76,7 +126,9 @@ class _TicketViewsState extends State<TicketViews> {
                     Row(
                       children: [
                         Text(
-                          widget.departure.substring(0, 3).toUpperCase(),
+                          widget.departure.isNotEmpty
+                              ? widget.departure.substring(0, 3).toUpperCase()
+                              : '',
                           style: widget.isColor == null
                               ? Styles.headLineStyle3
                                   .copyWith(color: Colors.white)
@@ -86,25 +138,27 @@ class _TicketViewsState extends State<TicketViews> {
                         ThickContainer(isColor: true),
                         Expanded(
                             child: Stack(
-                          children: [
-                            SizedBox(
-                              height: AppLayout.getHeight(24),
-                              child: AppLayoutBuilderWidget(sections: 6),
-                            ),
-                            Center(
-                              child: Transform.rotate(
-                                  angle: 1.5,
-                                  child: Icon(Icons.local_airport_rounded,
-                                      color: widget.isColor == null
-                                          ? Colors.white
-                                          : Color(0xFF8ACCF7))),
-                            ),
-                          ],
-                        )),
+                              children: [
+                                SizedBox(
+                                  height: AppLayout.getHeight(24),
+                                  child: AppLayoutBuilderWidget(sections: 6),
+                                ),
+                                Center(
+                                  child: Transform.rotate(
+                                      angle: 1.5,
+                                      child: Icon(Icons.local_airport_rounded,
+                                          color: widget.isColor == null
+                                              ? Colors.white
+                                              : Color(0xFF8ACCF7))),
+                                ),
+                              ],
+                            )),
                         ThickContainer(isColor: true),
                         Expanded(child: Container()),
                         Text(
-                            widget.arrival.substring(0, 3).toUpperCase(),
+                            widget.arrival.isNotEmpty
+                                ? widget.arrival.substring(0, 3).toUpperCase()
+                                : '',
                             style: widget.isColor == null
                                 ? Styles.headLineStyle3.copyWith(
                                     color: Colors.white,
@@ -122,7 +176,7 @@ class _TicketViewsState extends State<TicketViews> {
                             widget.departure,
                             style: widget.isColor == null
                                 ? Styles.headLineStyle4
-                                    .copyWith(color: Colors.white)
+                                .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
                           ),
                         ),
@@ -130,7 +184,7 @@ class _TicketViewsState extends State<TicketViews> {
                           "8H 20M",
                           style: widget.isColor == null
                               ? Styles.headLineStyle3
-                                  .copyWith(color: Colors.white)
+                              .copyWith(color: Colors.white)
                               : Styles.headLineStyle3,
                         ),
                         SizedBox(
@@ -140,7 +194,7 @@ class _TicketViewsState extends State<TicketViews> {
                             textAlign: TextAlign.end,
                             style: widget.isColor == null
                                 ? Styles.headLineStyle4
-                                    .copyWith(color: Colors.white)
+                                .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
                           ),
                         ),
@@ -171,29 +225,29 @@ class _TicketViewsState extends State<TicketViews> {
                     ),
                     Expanded(
                         child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: LayoutBuilder(
-                        builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          return Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: List.generate(
-                                (constraints.constrainWidth() / 15).floor(),
-                                (index) => SizedBox(
-                                    width: 5,
-                                    height: 1,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: widget.isColor == null
-                                              ? Colors.white
-                                              : Colors.grey.shade300),
-                                    ))),
-                          );
-                        },
-                      ),
-                    )),
+                          padding: const EdgeInsets.all(12.0),
+                          child: LayoutBuilder(
+                            builder:
+                                (BuildContext context, BoxConstraints constraints) {
+                              return Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: List.generate(
+                                    (constraints.constrainWidth() / 15).floor(),
+                                        (index) => SizedBox(
+                                        width: 5,
+                                        height: 1,
+                                        child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                              color: widget.isColor == null
+                                                  ? Colors.white
+                                                  : Colors.grey.shade300),
+                                        ))),
+                              );
+                            },
+                          ),
+                        )),
                     SizedBox(
                       height: 20,
                       width: 10,
@@ -219,7 +273,7 @@ class _TicketViewsState extends State<TicketViews> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(widget.isColor == null ? 21 : 0),
                         bottomRight:
-                            Radius.circular(widget.isColor == null ? 21 : 0))),
+                        Radius.circular(widget.isColor == null ? 21 : 0))),
                 padding: const EdgeInsets.only(
                     left: 16, top: 10, right: 16, bottom: 16),
                 child: Column(

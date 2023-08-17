@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:skyhive/stripe_payment/stripe_keys.dart';
 import 'package:get/get.dart';
@@ -11,14 +12,14 @@ abstract class PaymentManager {
           await _getClientSecret((amount * 100).toString(), currency);
       await _initializePaymentSheet(clientSecret);
       await Stripe.instance.presentPaymentSheet();
-      Get.offAll(() =>
-          TicketScreen(
-              passengerController: '',
-              valueChoose: '',
-              departure: '',
-              arrival: '',
-              dates: '',
-              heure: ''));
+      Get.to(()=>TicketScreen(
+        passengerController: '',
+        valueChoose: '',
+        departure: '',
+        arrival: '',
+        dates: '',
+        heure: '',
+      ));
     } catch (error) {
       throw Exception(error.toString());
     }

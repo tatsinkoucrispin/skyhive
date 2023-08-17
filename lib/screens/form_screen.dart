@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skyhive/screens/ticket_screen.dart';
+import '../error/7_error_2.dart';
 import '../utils/app_styles.dart';
-import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'bottom_bar.dart';
 import 'increment.dart';
 import 'login_page.dart';
+import 'package:dio/dio.dart';
+import 'package:skyhive/stripe_payment/stripe_keys.dart';
+
 
 class FormScreen extends StatefulWidget {
   final String? departureValue;
@@ -23,6 +26,50 @@ class FormScreen extends StatefulWidget {
 
   @override
   State<FormScreen> createState() => _FormScreenState();
+
+  static Future<void> makePayment(String valueChoose, String currency) async {
+    int amount;
+
+    if (valueChoose == 'Economic') {
+      amount = 1200;
+    } else if (valueChoose == 'Business') {
+      amount = 3500;
+    } else if (valueChoose == 'Premiere') {
+      amount = 10500;
+    } else {
+      throw Exception('Invalid valueChoose');
+    }
+
+    try {
+      String clientSecret = await _getClientSecret((amount * 100).toString(), currency);
+      await _initializePaymentSheet(clientSecret);
+      await Stripe.instance.presentPaymentSheet();
+    } catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  static Future<void> _initializePaymentSheet(String clientSecret) async {
+    await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'Tatsinkou',
+        ));
+  }
+
+  static Future<String> _getClientSecret(String amount, String currency) async {
+    Dio dio = Dio();
+    var response = await dio.post('https://api.stripe.com/v1/payment_intents',
+        options: Options(headers: {
+          'Authorization': 'Bearer ${ApiKeys.secretKey}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }),
+        data: {
+          'amount': amount,
+          'currency': currency,
+        });
+    return response.data["client_secret"];
+  }
 }
 
 class _FormScreenState extends State<FormScreen> {
@@ -63,6 +110,7 @@ class _FormScreenState extends State<FormScreen> {
     "09:00 PM",
     "10:00 PM"
   ];
+  int incrementCount = 0;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Map<String, dynamic>? paymentIntentData;
 
@@ -177,66 +225,38 @@ class _FormScreenState extends State<FormScreen> {
                           ),
                         ),
                       ),
-                      // Padding(padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.text,
-                      //     textInputAction: TextInputAction.next,
-                      //     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                      //     decoration: InputDecoration(
-                      //       hintText: "Passeport",
-                      //       //prefixIcon: Icon(icons),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.0),
-                      //         borderSide: const BorderSide(
-                      //           color: Color(0xFF526799),
-                      //           width: 1.5,
-                      //         ),
-                      //       ),
-                      //       enabledBorder:OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.0),
-                      //         borderSide: const BorderSide(
-                      //           color: Color(0xFF526799),
-                      //           width: 1.5,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 15, left: 10, right: 10),
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color(0xFF526799), width: 1.5),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: DropdownButton(
-                            hint: const Text("Select Class:"),
-                            icon: const Icon(Icons.arrow_drop_down),
-                            dropdownColor: Colors.grey.shade300,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 19
-                            ),
-                            iconSize: 30,
-                            isExpanded: true,
-                            underline: SizedBox(),
-                            value: valueChoose,
-                            onChanged: (newValue){
-                              setState(() {
-                                valueChoose = newValue.toString();
-                              });
-                            },
-                            items: listItem.map((valueItem){
-                              return DropdownMenuItem(
-                                value: valueItem,
-                                child: Text(valueItem),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFF526799), width: 1.5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton(
+                      hint: const Text("Select Class:"),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      dropdownColor: Colors.grey.shade300,
+                      style: const TextStyle(color: Colors.black, fontSize: 19),
+                      iconSize: 30,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      value: valueChoose,
+                      onChanged: (newValue) {
+                        setState(() {
+                          valueChoose = newValue.toString();
+                          FormScreen.makePayment(valueChoose, "USD"); // Appel de makePayment avec valueChoose et la devise souhaitée
+                        });
+                      },
+                      items: listItem.map((valueItem) {
+                        return DropdownMenuItem(
+                          value: valueItem,
+                          child: Text(valueItem),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -247,10 +267,10 @@ class _FormScreenState extends State<FormScreen> {
                               padding: const EdgeInsets.only(
                                   bottom: 15, left: 10, right: 10),
                               child: Container(
-                                padding: EdgeInsets.only(left: 10, right: 10),
+                                padding: const EdgeInsets.only(left: 10, right: 10),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: Color(0xFF526799), width: 1.5),
+                                        color: const Color(0xFF526799), width: 1.5),
                                     borderRadius: BorderRadius.circular(10)),
                                 child: DropdownButton(
                                   hint: const Text("Heure vol:"),
@@ -331,42 +351,70 @@ class _FormScreenState extends State<FormScreen> {
                         width: 200,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (departureController.text.isNotEmpty &&
-                                arrivalController.text.isNotEmpty &&
-                                passengerController.text.isNotEmpty) {
-                              String departure = departureController.text;
-                              String arrival = arrivalController.text;
-                              String passenger = passengerController.text;
-                              saveData(departure, arrival, passenger);
-                              saveFormData;
-                              //Provider.of<IncrementModel>(context, listen: false).increment();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TicketScreen(
-                                    passengerController: passengerController.text,
-                                    valueChoose: valueChoose,
+                          onPressed: () async {
+                            if (departureController.text.isEmpty||
+                                arrivalController.text.isEmpty ||
+                                passengerController.text.isEmpty) {
+                              Get.snackbar("About Ticket", "Ticket message",
+                                  backgroundColor: Colors.redAccent,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  titleText: const Text(
+                                    "Please fill in the arrival,departure and name fields",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  messageText: const Text(
+                                    "",
+                                    style: TextStyle(color: Colors.white),
+                                  ));
+                            } else  {
+                              if (
+                              (departureController.text.toLowerCase() == "douala-cameroun" || arrivalController.text.toLowerCase() == "douala-cameroun") ||
+                                  (arrivalController.text.toLowerCase() == "yaounde-cameroun" || departureController.text.toLowerCase() == "yaounde-cameroun") ||
+                                  (departureController.text.toLowerCase() == "london-england" || arrivalController.text.toLowerCase() == "london-england") ||
+                                  (departureController.text.toLowerCase() == "paris-france" || arrivalController.text.toLowerCase() == "paris-france") ||
+                                  (arrivalController.text.toLowerCase() == "dhaka-bangladesh" || departureController.text.toLowerCase() == "dhaka-bangladesh") ||
+                                  (departureController.text.toLowerCase() == "shanghai-chine" || arrivalController.text.toLowerCase() == "shanghai-chine") ||
+                                  (departureController.text.toLowerCase() == "pekin-chine" || arrivalController.text.toLowerCase() == "pekin-chine") ||
+                                  (arrivalController.text.toLowerCase() == "berlin-allemagne" || departureController.text.toLowerCase() == "berlin-allemagne") ||
+                                  (departureController.text.toLowerCase() == "abuja-nigeria" || arrivalController.text.toLowerCase() == "abuja-nigeria") ||
+                                  (departureController.text.toLowerCase() == "brazzaville-congo" || arrivalController.text.toLowerCase() == "brazzaville-congo") ||
+                                  (arrivalController.text.toLowerCase() == "bruxelles-belgique" || departureController.text.toLowerCase() == "bruxelles-belgique") ||
+                                  (departureController.text.toLowerCase() == "niamey-niger" || arrivalController.text.toLowerCase() == "niamey-niger") ||
+                                  (departureController.text.toLowerCase() == "tunis-tunisie" || arrivalController.text.toLowerCase() == "tunis-tunisie") ||
+                                  (departureController.text.toLowerCase() == "bamako-mali" || arrivalController.text.toLowerCase() == "bamako-mali") ||
+                                  (arrivalController.text.toLowerCase() == "ottawa-canada" || departureController.text.toLowerCase() == "ottawa-canada") ||
+                                  (departureController.text.toLowerCase() == "tokyo-japon" || arrivalController.text.toLowerCase() == "tokyo-japon")) {
+                                String departure = departureController.text;
+                                String arrival = arrivalController.text;
+                                String passenger = passengerController.text;
+                                saveData(departure, arrival, passenger);
+                                saveFormData;
+                                await FormScreen.makePayment(valueChoose, "USD");
+                                final ticketScreen = TicketScreen(
+                                  departure: departureController.text,
+                                  arrival: arrivalController.text,
+                                  dates: formattedDate,
+                                  heure: valueChoose2,
+                                  passengerController: passengerController.text,
+                                  valueChoose: valueChoose,
+                                );
+                                Get.to(() =>BottomBar(selectedIndex: 2,
                                     departure: departureController.text,
                                     arrival: arrivalController.text,
                                     dates: formattedDate,
                                     heure: valueChoose2,
-                                  ),
-                                ),
-                              );
-                              // Get.to(()=>LoginPage());
-                            } else {
-                              Get.snackbar("About Ticket", "Ticket message",
-                                  backgroundColor: Colors.redAccent,
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  titleText: Text(
-                                    "Please fill in the arrival,departure and name fields",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  messageText: Text(
-                                    "",
-                                    style: TextStyle(color: Colors.white),
-                                  ));
+                                    passengerController: passengerController.text,
+                                    valueChoose: valueChoose), arguments:TicketScreen(
+                                  departure: departureController.text,
+                                  arrival: arrivalController.text,
+                                  dates: formattedDate,
+                                  heure: valueChoose2,
+                                  passengerController: passengerController.text,
+                                  valueChoose: valueChoose,
+                                ));
+                              } else {
+                                Get.to(() => Error2Screen());
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -452,7 +500,7 @@ class _FormScreenState extends State<FormScreen> {
       print('Error saving data: $e');
     }
   }
-  int incrementCount = 0;
+
   void increment() {
     setState(() {
       incrementCount++;
@@ -463,4 +511,5 @@ class _FormScreenState extends State<FormScreen> {
     super.didChangeDependencies();
     _selectedTime = TimeOfDay.now().format(context);
   }
+
 }

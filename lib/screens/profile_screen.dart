@@ -4,18 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:skyhive/screens/ticket_view.dart';
-import 'package:skyhive/utils/app_info_list.dart';
 import 'package:skyhive/widgets/column_layout.dart';
-import 'package:skyhive/widgets/ticket_taps.dart';
-
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
 import '../widgets/layout_builder_widget.dart';
-import 'package:barcode_widget/barcode_widget.dart';
-
 import 'history_screen.dart';
+import 'login_page.dart';
 
 class ProfileScreen extends StatelessWidget {
   String email;
@@ -145,7 +140,7 @@ class ProfileScreen extends StatelessWidget {
                         style: Styles.headLineStyle2.copyWith(
                           fontWeight: FontWeight.bold, color: Colors.white),
                         ),
-                        Text("You have 95 flights in a year",
+                        Text("You have 10 flights in a year",
                           style: Styles.headLineStyle2.copyWith(
                               fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.9),
                               fontSize: 16
@@ -248,6 +243,7 @@ class ProfileScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   AuthController.instance.logOut();
+                  Get.to(()=>LoginPage());
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFDA3246),

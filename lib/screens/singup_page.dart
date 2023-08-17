@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:skyhive/screens/profile_screen.dart';
 import 'package:skyhive/screens/ticket_screen.dart';
+import 'package:skyhive/stripe_payment/payment_manager.dart';
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'bottom_bar.dart';
+import 'form_screen.dart';
+import 'home_screen.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -146,9 +151,15 @@ class SignUpPage extends StatelessWidget {
                 height: 70,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
-                  Get.toNamed('/ticket');
+                  await ProfileScreen(email: emailController.text,);
+                  Get.to(()=> BottomBar(selectedIndex: 0,
+                      departure: "",
+                      arrival: "",
+                      dates: "", heure: "",
+                      passengerController: "",
+                      valueChoose: ""), arguments:const HomeScreen());
                 },
                 child: Container(
                   width: w * 0.5,
@@ -189,9 +200,15 @@ class SignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
                         signInWithGoogle();
-                        Get.toNamed('/ticket');
+                        await ProfileScreen(email: emailController.text,);
+                        Get.to(()=> BottomBar(selectedIndex: 0,
+                            departure: "",
+                            arrival: "",
+                            dates: "", heure: "",
+                            passengerController: "",
+                            valueChoose: ""), arguments:const HomeScreen());
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -205,26 +222,16 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // GestureDetector(
-                    //   onTap: () async {
-                    //     //await signInWithGoogle();
-                    //   },
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(10.0),
-                    //     child: CircleAvatar(
-                    //       radius: 30,
-                    //       backgroundColor: Colors.grey[500],
-                    //       child: CircleAvatar(
-                    //         radius: 25,
-                    //         backgroundImage: AssetImage("assets/images/f.jpeg"),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async{
                         signInWithTwitter();
-                        Get.toNamed('/ticket');
+                        await ProfileScreen(email: emailController.text,);
+                        Get.to(()=> BottomBar(selectedIndex: 0,
+                            departure: "",
+                            arrival: "",
+                            dates: "", heure: "",
+                            passengerController: "",
+                            valueChoose: ""), arguments:const HomeScreen());
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),

@@ -40,7 +40,14 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/bottom':
-            return MaterialPageRoute(builder: (_) => const BottomBar());
+            return MaterialPageRoute(builder: (_) =>  BottomBar(
+                selectedIndex: 0,
+                departure:'',
+                arrival:'',
+                dates:'',
+                heure:'',
+                passengerController:'',
+                valueChoose:''));
           case '/form':
             return MaterialPageRoute(builder: (_) => const FormScreen());
           case '/login':
@@ -49,15 +56,6 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const SearchScreen());
           case '/home':
             return MaterialPageRoute(builder: (_) => const HomeScreen());
-          case '/ticket':
-            return MaterialPageRoute(
-                builder: (_) => TicketScreen(
-                    passengerController: '',
-                    valueChoose: '',
-                    departure: '',
-                    arrival: '',
-                    dates: '',
-                    heure: ''));
         }
       },
     );

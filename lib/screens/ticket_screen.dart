@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:skyhive/screens/ticket_view.dart';
-import 'package:skyhive/utils/app_info_list.dart';
 import 'package:skyhive/widgets/column_layout.dart';
-import 'package:skyhive/widgets/ticket_taps.dart';
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
 import '../utils/ticket_view.dart';
@@ -17,45 +12,26 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
 import 'form_screen.dart';
-import 'imprim_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:skyhive/screens/ticket_view.dart';
-import 'package:skyhive/utils/app_info_list.dart';
-import 'package:skyhive/widgets/column_layout.dart';
-import 'package:skyhive/widgets/ticket_taps.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
-import 'dart:typed_data';
-import '../utils/app_layout.dart';
-import '../utils/app_styles.dart';
-import '../utils/ticket_view.dart';
-import '../widgets/layout_builder_widget.dart';
-import 'package:barcode_widget/barcode_widget.dart';
-import 'dart:math';
-import 'form_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 class TicketScreen extends StatefulWidget {
-  late final String passengerController;
-  late final String valueChoose;
-  late final String departure;
-  late final String arrival;
+  String departure;
+  String arrival;
   String dates;
-  late final String heure;
-
+  String heure;
+  String passengerController;
+  String valueChoose;
   TicketScreen({Key? key,
-    required this.passengerController,
-    required this.valueChoose,
     required this.departure,
     required this.arrival,
     required this.dates,
-    required this.heure})
+    required this.heure,
+    required this.passengerController,
+    required this.valueChoose})
       : super(key: key);
 
   @override
@@ -63,73 +39,112 @@ class TicketScreen extends StatefulWidget {
 }
 
 class _TicketScreenState extends State<TicketScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initializeData();
-  // }
+  String randomNumber = '';
+  String randomString = '';
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    generateRandomValues();
+  }
+
+  void generateRandomValues() {
+    setState(() {
+      randomNumber = generateRandomNumber();
+      randomString = generateRandomString();
+    });
+  }
+
+  String generateRandomNumber() {
+    Random random = Random();
+    String number = '';
+
+    for (int i = 0; i < 12; i++) {
+      int digit = random.nextInt(10);
+      number += digit.toString();
+
+      if ([3, 7].contains(i)) {
+        number += ' ';
+      }
+    }
+    return number;
+  }
+
+  String generateRandomString() {
+    Random random = Random();
+    const int startAscii = 65; // ASCII pour 'A'
+    const int endAscii = 90; // ASCII pour 'Z'
+    String generatedString = '';
+
+    for (int i = 0; i < 6; i++) {
+      int randomAscii =
+          random.nextInt(endAscii - startAscii + 1) + startAscii;
+      String randomChar = String.fromCharCode(randomAscii);
+      generatedString += randomChar;
+    }
+
+    return generatedString;
+  }
+
+  String getFirstValue(String valueChoose) {
+    if (valueChoose == 'Economic') {
+      return '5071 3813 0804 1254';
+    } else if (valueChoose == 'Business') {
+      return '5746 1201 1567 5487';
+    } else if (valueChoose == 'Premiere') {
+      return '5971 6351 8512 7865';
+    } else {
+      return '';
+    }
+  }
+
+  String getFirstValueString(String valueChoose) {
+    if (valueChoose == 'Economic') {
+      return 'CNJCTI';
+    } else if (valueChoose == 'Business') {
+      return 'JYU7DG';
+    } else if (valueChoose == 'Premiere') {
+      return 'RTI9DL';
+    } else {
+      return '';
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    String generateRandomNumber() {
-      Random random = Random();
-      String number = '';
+    String firstTexte = getFirstValueString(widget.valueChoose);
+    String firstText = getFirstValue(widget.valueChoose);
 
-      for (int i = 0; i < 12; i++) {
-        int digit = random.nextInt(10);
-        number += digit.toString();
-
-        if ([3, 7].contains(i)) {
-          number += ' ';
-        }
-      }
-      return number;
-    }
-
-    String generateRandomString() {
-      Random random = Random();
-      const int startAscii = 65; // ASCII pour 'A'
-      const int endAscii = 90; // ASCII pour 'Z'
-      String generatedString = '';
-
-      for (int i = 0; i < 6; i++) {
-        int randomAscii =
-            random.nextInt(endAscii - startAscii + 1) + startAscii;
-        String randomChar = String.fromCharCode(randomAscii);
-        generatedString += randomChar;
-      }
-
-      return generatedString;
-    }
-
-    String generateRandomPrice(String label) {
-      Random random = Random();
-      String price = '\$';
-
-      if (label.contains('Economic')) {
-        price += '1000';
-      } else if (label.contains('Business')) {
-        price += '3500';
-      } else if (label.contains('Premiere')) {
-        price += '10000';
+    String getFirstTextValue(String valueChoose) {
+      if (valueChoose == 'Economic') {
+        return '1200USD';
+      } else if (valueChoose == 'Business') {
+        return '3500USD';
+      } else if (valueChoose == 'Premiere') {
+        return '10500USD';
       } else {
-        double randomPrice =
-            (random.nextDouble() * (10000 - 100) + 100).floorToDouble() / 100;
-        price += randomPrice.toStringAsFixed(2);
+        return '';
       }
-
-      return price;
+    }
+    String getFirstTexValue(String valueChoose) {
+      if (valueChoose == 'Economic') {
+        return '**** 4242';
+      } else if (valueChoose == 'Business') {
+        return '**** 6262';
+      } else if (valueChoose == 'Premiere') {
+        return '**** 6767';
+      } else {
+        return '';
+      }
     }
 
-    String label = 'Economic';
-    String firstTexts = generateRandomPrice(label);
+    String firstTexts = getFirstTextValue(widget.valueChoose);
     String secondTexts = 'Price';
-    String firstTexte = generateRandomString();
     String secondTexte = 'Booking code';
-    // DateTime parsedDate = DateTime.parse(widget.dates);
-    // String formattedDate = DateFormat('dd MMM').format(parsedDate);
-
-    String firstText = generateRandomNumber();
     String secondText = 'Number of E-ticket';
+    String payment = getFirstTexValue(widget.valueChoose);
     final size = AppLayout.getSize(context);
     return Scaffold(
         backgroundColor: Styles.bgColor,
@@ -144,25 +159,23 @@ class _TicketScreenState extends State<TicketScreen> {
                 "Tickets",
                 style: Styles.headLineStyle1,
               ),
-              // Gap(AppLayout.getHeight(20)),
-              //     const AppTicketTabs(firstTab: "Upcoming", secondTab: "Previous"),
               Gap(AppLayout.getHeight(20)),
               Container(
                 padding: EdgeInsets.only(left: AppLayout.getHeight(15)),
                 child: TicketViews(
-                  isColor: true,
                   departure: widget.departure,
                   arrival: widget.arrival,
-                  heure: widget.heure,
                   dates: widget.dates,
+                  heure: widget.heure,
+                  isColor: true,
                 ),
               ),
                   const SizedBox(height: 1,),
 
                   Container(
                     color: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 20),
-                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
                     child:  Column(
                       children: [
                          Row(
@@ -214,10 +227,10 @@ class _TicketScreenState extends State<TicketScreen> {
                                   "assets/images/visa.png",
                                   scale: 40,
                                 ),
-                                Text("*** 2462", style: Styles.headLineStyle3)
+                                Text(payment, style: Styles.headLineStyle3)
                               ],
                             ),
-                            Gap(5),
+                            const Gap(5),
                             Text(
                               "Payment method",
                               style: Styles.headLineStyle4,
@@ -279,7 +292,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   Gap(AppLayout.getHeight(20)),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => FormScreen());
+                      Get.to(() => FormScreen(departureValue:widget.departure,arrivalValue:widget.arrival));
                 },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -287,7 +300,7 @@ class _TicketScreenState extends State<TicketScreen> {
                         horizontal: AppLayout.getWidth(8),
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFF526799),
+                        color: const Color(0xFF526799),
                         borderRadius: BorderRadius.circular(AppLayout.getWidth(10)),
                       ),
                       child: Center(
@@ -326,7 +339,7 @@ class _TicketScreenState extends State<TicketScreen> {
                 left: AppLayout.getHeight(22),
                 top: AppLayout.getHeight(295),
                 child: Container(
-                  padding: EdgeInsets.all(3),
+                  padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: Styles.textColor, width: 2)
@@ -341,7 +354,7 @@ class _TicketScreenState extends State<TicketScreen> {
                 right: AppLayout.getHeight(22),
                 top: AppLayout.getHeight(295),
                 child: Container(
-                  padding: EdgeInsets.all(3),
+                  padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: Styles.textColor, width: 2)
@@ -352,22 +365,10 @@ class _TicketScreenState extends State<TicketScreen> {
                   ),
                 ),
               ),
-            ])
+            ]),
     );
   }
-  // Future<void> initializeData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   DateTime parsedDate = DateTime.parse(widget.date);
-  //   String formattedDate = DateFormat('dd MMM').format(parsedDate);
-  //   setState(() {
-  //     widget.departure = prefs.getString('Paris') ?? 'Paris';
-  //     widget.arrival = prefs.getString('Cameroun') ?? 'Cameroun';
-  //     formattedDate = prefs.getString('date') ?? 'date';
-  //     widget.passengerController = prefs.getString('Tatsinkou') ?? 'Tatsinkou';
-  //     widget.valueChoose = prefs.getString('Bussiness') ?? 'Bussiness';
-  //     widget.heure = prefs.getString('08-00 AM') ?? '08-00 AM';
-  //   });
-  // }
+
   Future<void> generatePDF() async {
     final pdf = pw.Document();
     String generateRandomNumber() {

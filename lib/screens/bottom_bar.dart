@@ -7,28 +7,48 @@ import 'package:skyhive/screens/ticket_screen.dart';
 import 'home_screen.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+  int selectedIndex=0;
+  String departure;
+  String arrival;
+  String dates;
+  String heure;
+  String passengerController;
+  String valueChoose;
+
+  BottomBar({super.key,required this.selectedIndex,required this.departure,
+    required this.arrival,
+    required this.dates,
+    required this.heure,
+    required this.passengerController,
+    required this.valueChoose});
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int _selectedIndex=0;
-  static final List<Widget>_widgetOptions = <Widget>[
-    const HomeScreen(),
-    const SearchScreen(),
-    TicketScreen(
-        passengerController: '',
-        valueChoose: '',
-        departure: '',
-        arrival: '',
-        dates: '',
-        heure: ''),
-    ProfileScreen(
-      email: '',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+    _widgetOptions = <Widget>[
+      const HomeScreen(),
+      const SearchScreen(),
+      TicketScreen(
+        departure: widget.departure,
+        arrival: widget.arrival,
+        dates: widget.dates,
+        heure: widget.heure,
+        passengerController: widget.passengerController,
+        valueChoose: widget.valueChoose,
+      ),
+      ProfileScreen(
+        email: '',
+      ),
+    ];
+  }
+  late int _selectedIndex;
+  late List<Widget> _widgetOptions;
 
   void _onItemTapped(int index){
     setState(() {
@@ -62,7 +82,7 @@ class _BottomBarState extends State<BottomBar> {
               label: "Search"),
           BottomNavigationBarItem(icon: Icon(FluentSystemIcons.ic_fluent_ticket_regular),
               activeIcon: Icon(FluentSystemIcons.ic_fluent_ticket_filled),
-              label: "Ticket"),
+              label: "/Ticket"),
           BottomNavigationBarItem(icon: Icon(FluentSystemIcons.ic_fluent_person_regular),
               activeIcon: Icon(FluentSystemIcons.ic_fluent_person_filled),
               label: "Profile")
