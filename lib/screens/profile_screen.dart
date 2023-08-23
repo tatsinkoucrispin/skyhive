@@ -1,10 +1,9 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:skyhive/widgets/column_layout.dart';
+
 import '../utils/app_layout.dart';
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
@@ -14,14 +13,27 @@ import 'login_page.dart';
 
 class ProfileScreen extends StatelessWidget {
   String email;
-  ProfileScreen({super.key,required this.email});
+  String departure;
+  String arrival;
+  String heure;
+  String dates;
+
+  ProfileScreen(
+      {super.key,
+      required this.email,
+      required this.departure,
+      required this.arrival,
+      required this.heure,
+      required this.dates});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Styles.bgColor,
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: AppLayout.getHeight(20),vertical: AppLayout.getHeight(20)),
+        padding: EdgeInsets.symmetric(
+            horizontal: AppLayout.getHeight(20),
+            vertical: AppLayout.getHeight(20)),
         children: [
           Gap(AppLayout.getHeight(40)),
           Row(
@@ -84,7 +96,11 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: (){
-                      Get.to(()=>HistoryScreen());
+                      Get.to(() => HistoryScreen(
+                          departure: departure,
+                          arrival: arrival,
+                          dates: dates,
+                          heure: heure));
                     },
                     child: Text(
                       "History",

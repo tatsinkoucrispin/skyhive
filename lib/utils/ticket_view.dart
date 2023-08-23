@@ -14,7 +14,6 @@ import '../widgets/layout_builder_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TicketViews extends StatefulWidget {
-
   final bool? isColor;
   String departure;
   String arrival;
@@ -33,11 +32,11 @@ class TicketViews extends StatefulWidget {
   @override
   _TicketViewsState createState() => _TicketViewsState();
 }
+
 class _TicketViewsState extends State<TicketViews> {
   String secondText = "Number";
   List<int> generatedNumbers = [];
   late SharedPreferences _prefs;
-
 
   @override
   bool get wantKeepAlive => true;
@@ -47,6 +46,7 @@ class _TicketViewsState extends State<TicketViews> {
     super.initState();
     //firstText = generateRandomNumber().toString();
   }
+
   int generateRandomNumber() {
     Random random = Random();
     int randomNumber = random.nextInt(100) + 1;
@@ -92,8 +92,7 @@ class _TicketViewsState extends State<TicketViews> {
       return '90';
     } else if (departure == 'Tokyo-Japon') {
       return '13';
-    }
-    else {
+    } else {
       return '';
     }
   }
@@ -116,7 +115,9 @@ class _TicketViewsState extends State<TicketViews> {
               */
               Container(
                 decoration: BoxDecoration(
-                    color: widget.isColor == null ? Color(0xFF526799) : Colors.white,
+                    color: widget.isColor == null
+                        ? Color(0xFF526799)
+                        : Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(AppLayout.getHeight(21)),
                         topRight: Radius.circular(AppLayout.getHeight(21)))),
@@ -138,21 +139,21 @@ class _TicketViewsState extends State<TicketViews> {
                         ThickContainer(isColor: true),
                         Expanded(
                             child: Stack(
-                              children: [
-                                SizedBox(
-                                  height: AppLayout.getHeight(24),
-                                  child: AppLayoutBuilderWidget(sections: 6),
-                                ),
-                                Center(
-                                  child: Transform.rotate(
-                                      angle: 1.5,
-                                      child: Icon(Icons.local_airport_rounded,
-                                          color: widget.isColor == null
-                                              ? Colors.white
-                                              : Color(0xFF8ACCF7))),
-                                ),
-                              ],
-                            )),
+                          children: [
+                            SizedBox(
+                              height: AppLayout.getHeight(24),
+                              child: AppLayoutBuilderWidget(sections: 6),
+                            ),
+                            Center(
+                              child: Transform.rotate(
+                                  angle: 1.5,
+                                  child: Icon(Icons.local_airport_rounded,
+                                      color: widget.isColor == null
+                                          ? Colors.white
+                                          : Color(0xFF8ACCF7))),
+                            ),
+                          ],
+                        )),
                         ThickContainer(isColor: true),
                         Expanded(child: Container()),
                         Text(
@@ -176,7 +177,7 @@ class _TicketViewsState extends State<TicketViews> {
                             widget.departure,
                             style: widget.isColor == null
                                 ? Styles.headLineStyle4
-                                .copyWith(color: Colors.white)
+                                    .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
                           ),
                         ),
@@ -184,7 +185,7 @@ class _TicketViewsState extends State<TicketViews> {
                           "8H 20M",
                           style: widget.isColor == null
                               ? Styles.headLineStyle3
-                              .copyWith(color: Colors.white)
+                                  .copyWith(color: Colors.white)
                               : Styles.headLineStyle3,
                         ),
                         SizedBox(
@@ -194,7 +195,7 @@ class _TicketViewsState extends State<TicketViews> {
                             textAlign: TextAlign.end,
                             style: widget.isColor == null
                                 ? Styles.headLineStyle4
-                                .copyWith(color: Colors.white)
+                                    .copyWith(color: Colors.white)
                                 : Styles.headLineStyle4,
                           ),
                         ),
@@ -207,7 +208,8 @@ class _TicketViewsState extends State<TicketViews> {
               * showing the orange part of the card/ticket
               * */
               Container(
-                color: widget.isColor == null ? Styles.orangeColor : Colors.white,
+                color:
+                    widget.isColor == null ? Styles.orangeColor : Colors.white,
                 child: Row(
                   children: [
                     SizedBox(
@@ -225,29 +227,29 @@ class _TicketViewsState extends State<TicketViews> {
                     ),
                     Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: LayoutBuilder(
-                            builder:
-                                (BuildContext context, BoxConstraints constraints) {
-                              return Flex(
-                                direction: Axis.horizontal,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: List.generate(
-                                    (constraints.constrainWidth() / 15).floor(),
-                                        (index) => SizedBox(
-                                        width: 5,
-                                        height: 1,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                              color: widget.isColor == null
-                                                  ? Colors.white
-                                                  : Colors.grey.shade300),
-                                        ))),
-                              );
-                            },
-                          ),
-                        )),
+                      padding: const EdgeInsets.all(12.0),
+                      child: LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          return Flex(
+                            direction: Axis.horizontal,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: List.generate(
+                                (constraints.constrainWidth() / 15).floor(),
+                                (index) => SizedBox(
+                                    width: 5,
+                                    height: 1,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: widget.isColor == null
+                                              ? Colors.white
+                                              : Colors.grey.shade300),
+                                    ))),
+                          );
+                        },
+                      ),
+                    )),
                     SizedBox(
                       height: 20,
                       width: 10,
@@ -269,11 +271,14 @@ class _TicketViewsState extends State<TicketViews> {
               * */
               Container(
                 decoration: BoxDecoration(
-                    color: widget.isColor == null ? Styles.orangeColor : Colors.white,
+                    color: widget.isColor == null
+                        ? Styles.orangeColor
+                        : Colors.white,
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(widget.isColor == null ? 21 : 0),
+                        bottomLeft:
+                            Radius.circular(widget.isColor == null ? 21 : 0),
                         bottomRight:
-                        Radius.circular(widget.isColor == null ? 21 : 0))),
+                            Radius.circular(widget.isColor == null ? 21 : 0))),
                 padding: const EdgeInsets.only(
                     left: 16, top: 10, right: 16, bottom: 16),
                 child: Column(

@@ -15,6 +15,7 @@ import 'form_screen.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
@@ -39,6 +40,7 @@ class TicketScreen extends StatefulWidget {
 }
 
 class _TicketScreenState extends State<TicketScreen> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   String randomNumber = '';
   String randomString = '';
 
@@ -49,6 +51,38 @@ class _TicketScreenState extends State<TicketScreen> {
   void initState() {
     super.initState();
     generateRandomValues();
+    var initializationSettingsAndroid =
+    const AndroidInitializationSettings('@mipmap/logo');
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+  Future<void> cancelReservation() async {
+    setState(() {
+
+      widget.departure = '';
+      widget.arrival = '';
+      widget.dates = '';
+      widget.heure = '';
+      widget.passengerController = '';
+      widget.valueChoose = '';
+    });
+
+    await _showNotification("Annulation de réservation",
+        "Vous venez d'annuler votre réservation.Merci d'avoir utilise notre application cher client ");
+  }
+  Future<void> _showNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+        'my_notification_channel',
+        'Notifications importantes',
+        channelDescription: 'Vous venez d annuler une reservation',
+        importance: Importance.max, priority: Priority.high);
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, title, body, platformChannelSpecifics,
+        payload: 'item x');
   }
 
   void generateRandomValues() {
@@ -130,11 +164,11 @@ class _TicketScreenState extends State<TicketScreen> {
     }
     String getFirstTexValue(String valueChoose) {
       if (valueChoose == 'Economic') {
-        return '**** 4242';
+        return '**** 4264';
       } else if (valueChoose == 'Business') {
-        return '**** 6262';
+        return '**** 4262';
       } else if (valueChoose == 'Premiere') {
-        return '**** 6767';
+        return '**** 4242';
       } else {
         return '';
       }
@@ -313,9 +347,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   ),
                   Gap(AppLayout.getHeight(15)),
                   GestureDetector(
-                    onTap: () {
-                      generatePDF();
-                    },
+                    onTap: cancelReservation,
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         vertical: AppLayout.getWidth(18),
@@ -327,7 +359,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "Imprimer",
+                          "Annuler",
                           style: Styles.textStyle.copyWith(color: Colors.white),
                         ),
                       ),

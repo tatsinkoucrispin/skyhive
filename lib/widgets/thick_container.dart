@@ -1,9 +1,8 @@
-import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThickContainer extends StatelessWidget {
   final bool? isColor;
+
   const ThickContainer({super.key, this.isColor});
 
   @override
@@ -11,9 +10,10 @@ class ThickContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(3.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(width: 2.5, color: isColor==null? Colors.white:Color(0xFF8ACCF7))
-      ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              width: 2.5,
+              color: isColor == null ? Colors.white : Color(0xFF8ACCF7))),
     );
   }
 }

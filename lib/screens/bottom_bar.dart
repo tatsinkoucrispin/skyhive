@@ -44,6 +44,10 @@ class _BottomBarState extends State<BottomBar> {
       ),
       ProfileScreen(
         email: '',
+          departure: widget.departure,
+          arrival: widget.arrival,
+          dates: widget.dates,
+          heure: widget.heure
       ),
     ];
   }

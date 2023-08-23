@@ -1,20 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:skyhive/screens/profile_screen.dart';
-import 'package:skyhive/screens/ticket_screen.dart';
-import 'package:skyhive/stripe_payment/payment_manager.dart';
+import 'package:twitter_login/twitter_login.dart';
+
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
-import 'package:twitter_login/twitter_login.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'bottom_bar.dart';
-import 'form_screen.dart';
 import 'home_screen.dart';
-import 'login_page.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -152,14 +148,40 @@ class SignUpPage extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () async {
-                  AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
-                  await ProfileScreen(email: emailController.text,);
-                  Get.to(()=> BottomBar(selectedIndex: 0,
-                      departure: "",
-                      arrival: "",
-                      dates: "", heure: "",
-                      passengerController: "",
-                      valueChoose: ""), arguments:const HomeScreen());
+                  if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty ) {
+                    AuthController.instance.register(
+                        emailController.text.trim(),
+                        passwordController.text.trim());
+                    await ProfileScreen(
+                        email: emailController.text,
+                        departure: '',
+                        arrival: '',
+                        dates: '',
+                        heure: '');
+                    Get.to(
+                            () =>
+                            BottomBar(
+                                selectedIndex: 0,
+                                departure: "",
+                                arrival: "",
+                                dates: "",
+                                heure: "",
+                                passengerController: "",
+                                valueChoose: ""),
+                        arguments: const HomeScreen());
+                  } else{
+                    Get.snackbar("About User", "User message",
+                        backgroundColor: Colors.redAccent,
+                        snackPosition: SnackPosition.BOTTOM,
+                        titleText: Text(
+                          "Account creation failed fill in the text fields",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        messageText: Text(
+                          toString(),
+                          style: TextStyle(color: Colors.white),
+                        ));
+                  }
                 },
                 child: Container(
                   width: w * 0.5,
@@ -201,14 +223,24 @@ class SignUpPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        signInWithGoogle();
-                        await ProfileScreen(email: emailController.text,);
-                        Get.to(()=> BottomBar(selectedIndex: 0,
-                            departure: "",
-                            arrival: "",
-                            dates: "", heure: "",
-                            passengerController: "",
-                            valueChoose: ""), arguments:const HomeScreen());
+                        await signInWithGoogle();
+                          await ProfileScreen(
+                              email: emailController.text,
+                              departure: '',
+                              arrival: '',
+                              dates: '',
+                              heure: '');
+                          Get.to(
+                              () => BottomBar(
+                                  selectedIndex: 0,
+                                  departure: "",
+                                  arrival: "",
+                                  dates: "",
+                                  heure: "",
+                                  passengerController: "",
+                                  valueChoose: ""),
+                              arguments: const HomeScreen());
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -224,14 +256,23 @@ class SignUpPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () async{
-                        signInWithTwitter();
-                        await ProfileScreen(email: emailController.text,);
-                        Get.to(()=> BottomBar(selectedIndex: 0,
-                            departure: "",
-                            arrival: "",
-                            dates: "", heure: "",
-                            passengerController: "",
-                            valueChoose: ""), arguments:const HomeScreen());
+                        await signInWithTwitter();
+                        await ProfileScreen(
+                            email: emailController.text,
+                            departure: '',
+                            arrival: '',
+                            dates: '',
+                            heure: '');
+                        Get.to(
+                            () => BottomBar(
+                                selectedIndex: 0,
+                                departure: "",
+                                arrival: "",
+                                dates: "",
+                                heure: "",
+                                passengerController: "",
+                                valueChoose: ""),
+                            arguments: const HomeScreen());
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),

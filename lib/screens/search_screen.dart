@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:skyhive/utils/app_layout.dart';
 
+import '../error/7_error_2.dart';
 import '../utils/app_styles.dart';
 import '../widgets/double_text_widget.dart';
 import '../widgets/icon_text_widget.dart';
@@ -26,56 +27,56 @@ class SearchScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: AppLayout.getWidth(20),vertical: AppLayout.getHeight(20)),
         children: [
           Gap(AppLayout.getHeight(40)),
-          Text("What are\nyou looking for?", style: Styles.headLineStyle1.copyWith(fontSize: AppLayout.getWidth(35)),),
+          Text("Where are\nyou going today?", style: Styles.headLineStyle1.copyWith(fontSize: AppLayout.getWidth(35)),),
           Gap(AppLayout.getHeight(20)),
-          FittedBox(
-            child: Container(
-              padding: const EdgeInsets.all(3.5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    AppLayout.getHeight(50),
-                  ),
-                  color: const Color(0xFFF4F6FD)),
-              child: Row(
-                children: [
-                  /*
-                airtime ticket
-                 */
-                  Container(
-                    width: size.width * .44,
-                    padding:
-                        EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(
-                          AppLayout.getHeight(50),
-                        )),
-                        color: Colors.white),
-                    child: const Center(
-                      child: Text("Airline Tickets"),
-                    ),
-                  ),
-                  /*
-                hotels
-                 */
-                  Container(
-                    width: size.width * .44,
-                    padding:
-                        EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(
-                          AppLayout.getHeight(50),
-                        )),
-                        color: Colors.transparent),
-                    child: const Center(
-                      child: Text("Hotels"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // FittedBox(
+          //   child: Container(
+          //     padding: const EdgeInsets.all(3.5),
+          //     decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(
+          //           AppLayout.getHeight(50),
+          //         ),
+          //         color: const Color(0xFFF4F6FD)),
+          //     child: Row(
+          //       children: [
+          //         /*
+          //       airtime ticket
+          //        */
+          //         Container(
+          //           width: size.width * .44,
+          //           padding:
+          //               EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.horizontal(
+          //                   left: Radius.circular(
+          //                 AppLayout.getHeight(50),
+          //               )),
+          //               color: Colors.white),
+          //           child: const Center(
+          //             child: Text("Airline Tickets"),
+          //           ),
+          //         ),
+          //         /*
+          //       hotels
+          //        */
+          //         Container(
+          //           width: size.width * .44,
+          //           padding:
+          //               EdgeInsets.symmetric(vertical: AppLayout.getHeight(7)),
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.horizontal(
+          //                   right: Radius.circular(
+          //                 AppLayout.getHeight(50),
+          //               )),
+          //               color: Colors.transparent),
+          //           child: const Center(
+          //             child: Text("Hotels"),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Gap(AppLayout.getHeight(25)),
           Stack(
             children: [
@@ -137,14 +138,93 @@ class SearchScreen extends StatelessWidget {
           Gap(AppLayout.getHeight(25)),
           GestureDetector(
             onTap: () {
-              if (departureController.text.isNotEmpty && arrivalController.text.isNotEmpty ) {
-                String departure = departureController.text;
-                String arrival = arrivalController.text;
-                saveData(departure, arrival);
-                Get.to(() => FormScreen(
-                      departureValue: departureController.text,
-                      arrivalValue: arrivalController.text,
+              if (departureController.text.isEmpty ||
+                  arrivalController.text.isEmpty) {
+                Get.snackbar("About Ticket", "Ticket message",
+                    backgroundColor: Colors.redAccent,
+                    snackPosition: SnackPosition.BOTTOM,
+                    titleText: Text(
+                      "Please fill in the arrival and departure fields",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    messageText: Text(
+                      "",
+                      style: TextStyle(color: Colors.white),
                     ));
+              } else {
+                if (
+                (departureController.text.toLowerCase() == "douala-cameroun" ||
+                    arrivalController.text.toLowerCase() ==
+                        "douala-cameroun") ||
+                    (arrivalController.text.toLowerCase() ==
+                        "yaounde-cameroun" ||
+                        departureController.text.toLowerCase() ==
+                            "yaounde-cameroun") ||
+                    (departureController.text.toLowerCase() ==
+                        "london-england" ||
+                        arrivalController.text.toLowerCase() ==
+                            "london-england") ||
+                    (departureController.text.toLowerCase() == "paris-france" ||
+                        arrivalController.text.toLowerCase() ==
+                            "paris-france") ||
+                    (arrivalController.text.toLowerCase() ==
+                        "dhaka-bangladesh" ||
+                        departureController.text.toLowerCase() ==
+                            "dhaka-bangladesh") ||
+                    (departureController.text.toLowerCase() ==
+                        "shanghai-chine" ||
+                        arrivalController.text.toLowerCase() ==
+                            "shanghai-chine") ||
+                    (departureController.text.toLowerCase() == "pekin-chine" ||
+                        arrivalController.text.toLowerCase() ==
+                            "pekin-chine") ||
+                    (arrivalController.text.toLowerCase() ==
+                        "berlin-allemagne" ||
+                        departureController.text.toLowerCase() ==
+                            "berlin-allemagne") ||
+                    (departureController.text.toLowerCase() ==
+                        "abuja-nigeria" ||
+                        arrivalController.text.toLowerCase() ==
+                            "abuja-nigeria") ||
+                    (departureController.text.toLowerCase() ==
+                        "brazzaville-congo" ||
+                        arrivalController.text.toLowerCase() ==
+                            "brazzaville-congo") ||
+                    (arrivalController.text.toLowerCase() ==
+                        "bruxelles-belgique" ||
+                        departureController.text.toLowerCase() ==
+                            "bruxelles-belgique") ||
+                    (departureController.text.toLowerCase() == "niamey-niger" ||
+                        arrivalController.text.toLowerCase() ==
+                            "niamey-niger") ||
+                    (departureController.text.toLowerCase() ==
+                        "tunis-tunisie" ||
+                        arrivalController.text.toLowerCase() ==
+                            "tunis-tunisie") ||
+                    (departureController.text.toLowerCase() == "bamako-mali" ||
+                        arrivalController.text.toLowerCase() ==
+                            "bamako-mali") ||
+                    (arrivalController.text.toLowerCase() == "ottawa-canada" ||
+                        departureController.text.toLowerCase() ==
+                            "ottawa-canada") ||
+                    (departureController.text.toLowerCase() == "tokyo-japon" ||
+                        arrivalController.text.toLowerCase() ==
+                            "tokyo-japon")) {
+                  String departure = departureController.text;
+                  String arrival = arrivalController.text;
+                  saveData(departure, arrival);
+                  Get.to(() =>
+                      FormScreen(
+                        departureValue: departureController.text,
+                        arrivalValue: arrivalController.text,
+                      ));
+                } else {
+                  Get.to(() => Error2Screen());
+                }
+              }
+              if (departureController.text.isNotEmpty &&
+                  arrivalController.text.isNotEmpty) {
+
               } else {
                 Get.snackbar("About Ticket", "Ticket message",
                     backgroundColor: Colors.redAccent,
@@ -170,14 +250,14 @@ class SearchScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "tickets",
+                  "Search tickets",
                   style: Styles.textStyle.copyWith(color: Colors.white),
                 ),
               ),
             ),
           ),
           Gap(AppLayout.getHeight(40)),
-          const AppDoubleTextWidget(bigText: "Upcoming Flights", smallText: ""),
+          const AppDoubleTextWidget(bigText: "Announcement on future flights", smallText: ""),
           Gap(AppLayout.getHeight(15)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,24 +347,24 @@ class SearchScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Text("Take love", style: Styles.headLineStyle2.copyWith(color: Colors.white, fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                        Text("Order your tickets today", style: Styles.headLineStyle2.copyWith(color: Colors.white, fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
                         Gap(AppLayout.getHeight(5)),
-                        RichText(text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text:'😍',
-                              style: TextStyle(fontSize: 38)
-                            ),
-                            TextSpan(
-                                text:'🥰',
-                                style: TextStyle(fontSize: 50)
-                            ),
-                            TextSpan(
-                                text:'😘',
-                                style: TextStyle(fontSize: 38)
-                            ),
-                          ],
-                        ))
+                        // RichText(text: const TextSpan(
+                        //   children: [
+                        //     TextSpan(
+                        //       text:'😍',
+                        //       style: TextStyle(fontSize: 38)
+                        //     ),
+                        //     TextSpan(
+                        //         text:'🥰',
+                        //         style: TextStyle(fontSize: 50)
+                        //     ),
+                        //     TextSpan(
+                        //         text:'😘',
+                        //         style: TextStyle(fontSize: 38)
+                        //     ),
+                        //   ],
+                        // ))
                       ],
                     ),
                   )

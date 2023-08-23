@@ -1,18 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:skyhive/screens/bottom_bar.dart';
 import 'package:skyhive/screens/profile_screen.dart';
 import 'package:skyhive/screens/singup_page.dart';
-import 'package:skyhive/screens/ticket_screen.dart';
-import 'package:skyhive/stripe_payment/payment_manager.dart';
+
 import '../utils/app_styles.dart';
 import '../utils/auth_controller.dart';
-import 'form_screen.dart';
 import 'home_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -165,21 +159,30 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 70,),
             GestureDetector(
               onTap: () async {
-                if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty ){
-                  AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
-                  await ProfileScreen(email: emailController.text,);
-                  Get.to(()=> BottomBar(selectedIndex: 0,
-                      departure: "",
-                      arrival: "",
-                      dates: "", heure: "",
-                      passengerController: "",
-                      valueChoose: ""), arguments:const HomeScreen());
-                } else {
+                if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
+                   AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
+                    await ProfileScreen(
+                        email: emailController.text,
+                        departure: '',
+                        arrival: '',
+                        dates: '',
+                        heure: '');
+                    Get.to(
+                        () => BottomBar(
+                            selectedIndex: 0,
+                            departure: "",
+                            arrival: "",
+                            dates: "",
+                            heure: "",
+                            passengerController: "",
+                            valueChoose: ""),
+                        arguments: const HomeScreen());
+                  } else {
                   Get.snackbar("About Login", "Login message",
                       backgroundColor: Colors.redAccent,
                       snackPosition: SnackPosition.BOTTOM,
                       titleText: Text(
-                        "Login failed",
+                        "Login failed fill in the text fields",
                         style: TextStyle(
                             color: Colors.white
                         ),
@@ -192,7 +195,6 @@ class _LoginPageState extends State<LoginPage> {
                       )
                   );
                 }
-
               },
               child: Container(
                 width: w*0.5,

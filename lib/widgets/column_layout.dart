@@ -9,12 +9,13 @@ class AppColumnLayout extends StatelessWidget {
   final String firstText;
   final String secondText;
   final bool? isColor;
-  const AppColumnLayout({super.key,
-    required this.firstText,
-    required this.secondText,
-    required this.alignment,
-    this.isColor
-  });
+
+  const AppColumnLayout(
+      {super.key,
+      required this.firstText,
+      required this.secondText,
+      required this.alignment,
+      this.isColor});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,19 @@ class AppColumnLayout extends StatelessWidget {
       crossAxisAlignment: alignment,
       //style:isColor==null? Styles.headLineStyle3.copyWith(color: Colors.white):Styles.headLineStyle3,),
       children: [
-        Text(firstText, style:isColor==null? Styles.headLineStyle3.copyWith(color: Colors.white):Styles.headLineStyle3,),
+        Text(
+          firstText,
+          style: isColor == null
+              ? Styles.headLineStyle3.copyWith(color: Colors.white)
+              : Styles.headLineStyle3,
+        ),
         Gap(AppLayout.getHeight(5)),
-        Text(secondText, style: isColor==null?Styles.headLineStyle4.copyWith(color: Colors.white):Styles.headLineStyle4,),
+        Text(
+          secondText,
+          style: isColor == null
+              ? Styles.headLineStyle4.copyWith(color: Colors.white)
+              : Styles.headLineStyle4,
+        ),
       ],
     );
   }

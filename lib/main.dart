@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
 
           primaryColor: primary,
       ),
-      initialRoute: '/bottom',
+      initialRoute: '/login',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/bottom':
